@@ -19,3 +19,13 @@ std::string Package::get_content() const
 {
 	return this->content;
 }
+
+sf::Packet& operator>>(sf::Packet& packet, Package& package)
+{
+	return packet >> package.content;
+}
+
+sf::Packet& operator<<(sf::Packet& packet, Package& package)
+{
+	return packet << package.content;
+}

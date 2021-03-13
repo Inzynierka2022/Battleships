@@ -14,13 +14,3 @@ public:
 	void set_type_pong();
 	std::string get_content() const;
 };
-
-sf::Packet& operator>>(sf::Packet& packet, Package& package)
-{
-	return packet >> package.content;
-}
-
-sf::Packet& operator<<(sf::Packet& packet, Package& package)
-{
-	return packet << package.content;
-}
