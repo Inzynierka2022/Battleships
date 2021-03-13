@@ -146,6 +146,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Battleships.cpp" />
+    <ClCompile Include="Package.cpp" />
+    <ClCompile Include="TCPCommunicator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Package.h" />
+    <ClInclude Include="TCPCommunicator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
