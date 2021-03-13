@@ -23,6 +23,7 @@ public:
 	void send(Package);
 	std::shared_ptr<std::vector<Package>> receive();
 
+	void stop_listening();
 	void run();
 };
 
