@@ -146,10 +146,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Battleships.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Package.cpp" />
     <ClCompile Include="TCPCommunicator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="Package.h" />
     <ClInclude Include="TCPCommunicator.h" />
   </ItemGroup>
