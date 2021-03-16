@@ -5,10 +5,13 @@
 #include <string>
 class Button
 {
-	sf::RectangleShape rectangle;
-	
+private:
 
+
+protected:
+	sf::RectangleShape rectangle;
 	sf::Text text;
+
 public:
 	sf::Font font;
 	static std::string fontFile;
@@ -16,7 +19,7 @@ public:
 	static sf::Color rectangleOutlineColor;
 	static sf::Color rectangleColor;
 	static sf::Color textColor;
-	static uint8_t rectangleOutlineThickness;
+	static int8_t rectangleOutlineThickness;
 
 
 	Button(const sf::Vector2f& position, std::string content);
@@ -26,6 +29,12 @@ public:
 	sf::Vector2f getPosition() const;
 	void setString(const std::string &);
 
+	void invertColors();
+
+	sf::FloatRect getLocalBounds();
+	sf::FloatRect getGlobalBounds();
+
+	void restoreColors();
 };
 
 	
