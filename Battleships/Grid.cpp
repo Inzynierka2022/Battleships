@@ -22,15 +22,15 @@ Grid::Grid(sf::Vector2i position)
 	font.loadFromFile("SM.TTF");
 	sf::Text t1;
 	t1.setFont(font);
-	std::string s1[] = { "A","B","C","D","E","F","G","H","I","J" };
+	std::string s1[] = { "A","B","C","D","E","F","G","H"," I","J" };
 	std::string s2[] = { "1","2","3","4","5","6","7","8","9","10" };
 	for (int i = 0; i < 10; i++)
 	{
 		t1.setString(s1[i]);
-		t1.setPosition(tiles[i][0].getPosition() - sf::Vector2f(0,gridSize));
+		t1.setPosition(tiles[i][0].getPosition() - sf::Vector2f(-5,gridSize));
 		yColumn.push_back(t1);
 		t1.setString(s2[i]);
-		t1.setPosition(tiles[0][i].getPosition() - sf::Vector2f(gridSize, 0));
+		t1.setPosition(tiles[0][i].getPosition() - sf::Vector2f(gridSize+5, 0));
 		xColumn.push_back(t1);
 	}
 }
