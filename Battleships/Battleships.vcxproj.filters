@@ -24,6 +24,13 @@
     <ClCompile Include="Package.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="TextField.cpp">
     <ClCompile Include="Grid.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -35,6 +42,13 @@
     <ClInclude Include="Package.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="TextField.h">
     <ClInclude Include="Grid.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
