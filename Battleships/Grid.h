@@ -11,6 +11,9 @@ private:
 	std::vector<std::vector<sf::RectangleShape>> tiles;
 	sf::Vector2i selectedTile;
 	void draw_on_position(uint8_t, sf::Vector2f);
+	sf::Font font;
+	std::vector<sf::Text>xColumn;
+	std::vector<sf::Text>yColumn;
 public:
 	Grid(sf::Vector2i);
 	void Draw(sf::RenderWindow& window);
