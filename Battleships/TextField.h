@@ -7,9 +7,11 @@ class TextField : public Button
 private:
 	bool active;
 	void backspace();
+protected:
+	sf::Text text1;
 public:
 	void add_character(const char&);
-
+	void draw(sf::RenderWindow& );
 	bool is_active() const;
 	
 	TextField(const sf::Vector2f&);
@@ -22,6 +24,7 @@ public:
 	void hover();
 	void restoreColors();
 	void click();
+	void display_promt();
 
 
 };
