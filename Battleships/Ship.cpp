@@ -49,10 +49,12 @@ bool Ship::isHorizontal() const
 
 void Ship::rotate()
 {
-	if (type == 1) return;
+	//if (type == 1) return;
 	horizontal = !horizontal;
 	sf::Vector2f size = rectangle.getSize();
 	rectangle.setSize(sf::Vector2f(size.y, size.x));
+	if (horizontal) rectangle.setTextureRect(sf::IntRect(0, 40 * (type - 1), 40 * type, 40));
+	else rectangle.setTextureRect(sf::IntRect(40 * type, 0, 40, 40 * type));
 }
 
 void Ship::setOrientation(bool _horizontal)
