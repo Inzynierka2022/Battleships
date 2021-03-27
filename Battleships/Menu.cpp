@@ -1,21 +1,48 @@
 #include "Menu.h"
 
-
-Menu::Menu() : 
-type_name(sf::Vector2f(200, 50)),
-join_button(sf::Vector2f(200,50+70), "  join"), 
-create_game_button(sf::Vector2f(200, 50+70+70), "  create game"),
-scoreboard(sf::Vector2f(200, 50+70+70+70), "  scoreboard")
+Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 {
+	if (this->menu_class == Menu::Stored_menu::main)
+	{
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x/2, windowSize.y / 2), "TYPE NAME"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "JOIN"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70), "CREATE GAME"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70 + 70), "SCOREBOARD"));
+		
+		for (unsigned int i = 0; i < this->elements.size(); i++)
+		{
+			elements[i]->setPosition(sf::Vector2f(windowSize.x / 2, 140 + (70 * i)));
+		}
 
+		this->sub_menus.push_back(std::make_shared<Menu>(Menu::Stored_menu::join, windowSize));
+		this->sub_menus.push_back(std::make_shared<Menu>(Menu::Stored_menu::host, windowSize));
+	}
+	else if (this->menu_class == Menu::Stored_menu::join)
+	{
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "IP address"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "PIN"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70), "join"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70 + 70), "back"));
+	}
+	else if (this->menu_class == Menu::Stored_menu::host)
+	{
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "127.0.0.1"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "NEXT"));
+	}
+	else if (this->menu_class == Menu::Stored_menu::waiting)
+	{
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "WAITING"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2+70), "127.0.0.1"));
+	}
+	
 }
 
 void Menu::draw(sf::RenderWindow &window)
 {
-	this->type_name.draw(window);
-	this->join_button.draw(window);
-	this->create_game_button.draw(window);
-	this->scoreboard.draw(window);
+	for (auto& elem : this->elements)
+	{
+		elem->draw(window);
+	}
 }
 
 void Menu::run(sf::RenderWindow& window)
@@ -29,76 +56,65 @@ void Menu::run(sf::RenderWindow& window)
 			{
 				window.close();
 			}
+			
 			if (event.type == sf::Event::TextEntered)
 			{
 				if (event.text.unicode < 128)
 				{
-					if (this->type_name.is_active())
+					for (auto& elem : elements)
 					{
-						this->type_name.add_character(static_cast<char>(event.text.unicode));
+						if (elem->is_active())
+						{
+							elem->add_character(static_cast<char>(event.text.unicode));
+						}
 					}
+					
+					
 				}
 			}
 		}
 
 		window.clear();
-		this->mouseEvent((sf::Vector2f)sf::Mouse::getPosition(window));
+		this->mouseEvent((sf::Vector2f)sf::Mouse::getPosition(window), window);
 		this->draw(window);
 		window.display();
 		
 	}
 }
 
-void Menu::mouseEvent(const sf::Vector2f &mousePosition)
+void Menu::mouseEvent(const sf::Vector2f &mousePosition, sf::RenderWindow& window)
 {
-	if (type_name.getGlobalBounds().contains(mousePosition))
+	if (elements[1]->getGlobalBounds().contains(mousePosition))
 	{
-		type_name.hover();
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			type_name.click();
+			for (auto& elem : this->elements)
+			{
+				elem->deactivate();
+			}
+			this->sub_menus[0]->run(window);
 		}
 	}
-	else
-	{
-		type_name.restoreColors();
-	}
-
-	if (join_button.getGlobalBounds().contains(mousePosition))
-	{
-		join_button.invertColors();
-	}
-	else
-	{
-		join_button.restoreColors();
-	}
 
 
-	if (join_button.getGlobalBounds().contains(mousePosition))
+	for (auto& elem : this->elements)
 	{
-		join_button.invertColors();
-	}
-	else
-	{
-		join_button.restoreColors();
-	}
-
-	if (create_game_button.getGlobalBounds().contains(mousePosition))
-	{
-		create_game_button.invertColors();
-	}
-	else
-	{
-		create_game_button.restoreColors();
-	}
-
-	if (scoreboard.getGlobalBounds().contains(mousePosition))
-	{
-		scoreboard.invertColors();
-	}
-	else
-	{
-		scoreboard.restoreColors();
+		if (elem->getGlobalBounds().contains(mousePosition))
+		{
+			elem->hover();
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				for (auto& elem : this->elements)
+				{
+					elem->deactivate();
+				}
+				elem->click();
+			}
+		}
+		else
+		{
+			elem->restoreColors();
+		}
 	}
 }
 

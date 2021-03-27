@@ -5,7 +5,7 @@ sf::Color TextField::rectangleColor = sf::Color(0, 0, 255, 128);
 sf::Color TextField::color1 = sf::Color(0, 255, 0);
 sf::Color TextField::transparent_color = sf::Color::Transparent;
 
-TextField::TextField(const sf::Vector2f& position) : Button(position, "  Type name")
+TextField::TextField(const sf::Vector2f& position, std::string content) : Button(position, content)
 {
 	this->active = 0;
 	this->rectangle.setSize(Button::rectangleSize);
@@ -18,7 +18,7 @@ TextField::TextField(const sf::Vector2f& position) : Button(position, "  Type na
 	this->text1.setCharacterSize(this->text.getCharacterSize());
 	
 	this->text1.setFont(this->font);
-	this->text1.setPosition(this->text.getPosition()+sf::Vector2f(1,0));
+	this->display_promt();
 }
 void TextField::draw(sf::RenderWindow& window)
 {
@@ -47,6 +47,7 @@ void TextField::backspace()
 
 void TextField::add_character(const char &c)
 {
+	this->calculateOrigin();
 	if (c == '\u0008')
 	{
 		this->backspace();
@@ -58,10 +59,11 @@ void TextField::add_character(const char &c)
 		this->active = false;
 		return;
 	}
-	display_promt();
+	
 	std::string tmp = this->text.getString();
 	tmp += c;
 	this->text.setString(tmp);
+	display_promt();
 }
 
 bool TextField::is_active() const
@@ -77,6 +79,7 @@ void TextField::hover()
 	this->rectangle.setOutlineColor(TextField::rectangleOutlineColor);
 }
 
+
 void TextField::restoreColors()
 {
 	if (this->active) return;
@@ -86,12 +89,19 @@ void TextField::restoreColors()
 
 void TextField::click()
 {
+	this->display_promt();
 	this->active = 1;
 	this->rectangle.setFillColor(TextField::transparent_color);
 	this->rectangle.setOutlineColor(TextField::transparent_color);
 }
 
+void TextField::setPosition(const sf::Vector2f& p)
+{
+	this->rectangle.setPosition(p);
+	this->text.setPosition(p);
+}
+
 void TextField::display_promt()
 {
-	this->text1.setPosition(this->text.findCharacterPos(this->text.getString().getSize() + 2) /*- sf::Vector2f(text.getCharacterSize(), 0)*/);
+	this->text1.setPosition(this->text.findCharacterPos(this->text.getString().getSize() + 2));
 }
