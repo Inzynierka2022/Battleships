@@ -26,6 +26,17 @@ bool Grid::isFree(sf::Vector2i coordinates)
 	return true;
 }
 
+void Grid::clearGrid()
+{
+	for (int i = 0; i < gridRows; i++)
+	{
+		for (int j = 0; j < gridColumns; j++)
+		{
+			fields[i][j] = fieldType::Empty;
+		}
+	}
+}
+
 Grid::Grid(sf::Vector2i position)
 {
 	this->position = position;
@@ -37,9 +48,10 @@ Grid::Grid(sf::Vector2i position)
 		fields[x].resize(gridColumns, fieldType::Empty);
 		for (int y = 0; y < gridColumns; y++) {
 			tiles[x][y].setSize(sf::Vector2f(gridSize, gridSize));
-			tiles[x][y].setFillColor(sf::Color::Cyan);
+			tiles[x][y].setFillColor(sf::Color(0x39,0x47,0xb8,0xff));
 			tiles[x][y].setOutlineThickness(-2.f);
-			tiles[x][y].setOutlineColor(sf::Color(255, 0, 0, 127));
+			//tiles[x][y].setOutlineColor(sf::Color(255, 0, 0, 127));
+			tiles[x][y].setOutlineColor(sf::Color(0x2e,0x3c,0xac, 0xff));
 			tiles[x][y].setPosition(x * gridSize + position.x, y * gridSize + position.y);
 		}
 	}
@@ -76,7 +88,7 @@ void Grid::draw(sf::RenderWindow& window)
 void Grid::tileSelect(sf::Vector2i mousePos)
 {
 	//reset previously selected tile
-	tiles[selectedTile.x][selectedTile.y].setFillColor(sf::Color::Cyan);
+	tiles[selectedTile.x][selectedTile.y].setFillColor(sf::Color(0x39, 0x47, 0xb8, 0xff));
 	isAnySelected = false;
 	//check if mouse is inside of the grid
 	if (mousePos.x > position.x && mousePos.x < position.x + (gridColumns * gridSize) && mousePos.y > position.y && mousePos.y < position.y + (gridRows * gridSize)) {

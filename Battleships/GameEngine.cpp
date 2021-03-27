@@ -4,11 +4,15 @@
 GameEngine::GameEngine()
 {
 	gameState = 0;
+	Button* readyButton = new Button(sf::Vector2f(700,700),"not ready");
+	buttons.push_back(readyButton);
 }
 
 void GameEngine::run(sf::RenderWindow& window)
 {
 	bool dragShip = false;
+	bool buttonPressed = false;
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -36,6 +40,33 @@ void GameEngine::run(sf::RenderWindow& window)
 				}
 			}
 		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+			if (!buttonPressed && gameState<2)
+			{
+				buttonPressed = true;
+				ships.resetShips();
+				gridA.clearGrid();
+				buttons[0]->setString("not ready");
+			}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		{
+			if (!buttonPressed && gameState<2 && ships.checkIfAllPlaced())
+			{
+				buttonPressed = true;
+				gameState = (gameState + 1) % 2;
+				std::cout << gameState << '\n';
+				if (gameState) buttons[0]->setString("ready");
+				else buttons[0]->setString("not ready");
+			}
+		}
+		else
+		{
+			buttonPressed = false;
+		}
+
 		window.clear();
 
 		gridA.tileSelect(sf::Mouse::getPosition(window));
@@ -57,6 +88,7 @@ void GameEngine::run(sf::RenderWindow& window)
 		gridB.draw(window);
 
 		ships.draw(window);
+		buttons[0]->draw(window);
 
 		window.display();
 	}

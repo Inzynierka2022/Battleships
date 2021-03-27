@@ -6,6 +6,7 @@ private:
 	sf::RectangleShape rectangle;
 	uint8_t type = 0;
 	bool horizontal = true;
+	sf::Texture* shipsTextures;
 public:
 	Ship();
 	Ship(uint8_t type, sf::Vector2f position);

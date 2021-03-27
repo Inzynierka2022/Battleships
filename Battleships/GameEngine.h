@@ -4,6 +4,7 @@
 #include "TCPCommunicator.h"
 #include <memory>
 #include "Ships.h"
+#include "Button.h"
 
 class GameEngine
 {
@@ -11,7 +12,12 @@ private:
 	Grid gridA = Grid(sf::Vector2i(80, 100));
     Grid gridB = Grid(sf::Vector2i(560, 100));
 	Ships ships = Ships();
-	uint8_t gameState;
+	int gameState;	
+	/*
+	0 - placing ships
+	1 - ready/waiting for opponent
+	*/
+	std::vector<Button*> buttons;
 
 public:
 	GameEngine();

@@ -31,5 +31,6 @@ public:
 	void placeShip(Ship& s);
 	void clearSpace(Ship& s);
 	sf::Vector2i getHoveredTilePosition();
+	void clearGrid();
 };
 

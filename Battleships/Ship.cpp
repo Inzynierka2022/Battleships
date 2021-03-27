@@ -6,10 +6,13 @@ Ship::Ship()
 
 Ship::Ship(uint8_t type, sf::Vector2f position)
 {
+	shipsTextures = new sf::Texture;
+	shipsTextures->loadFromFile("ships.png");
 	this->type = type;
 	rectangle.setSize(sf::Vector2f(type * 40, 40));
 	rectangle.setPosition(position);
-	rectangle.setFillColor(sf::Color::White);
+	rectangle.setTexture(shipsTextures);
+	rectangle.setTextureRect(sf::IntRect(0, 40 * (type - 1), 40 * type, 40));
 }
 
 void Ship::draw(sf::RenderWindow& window)

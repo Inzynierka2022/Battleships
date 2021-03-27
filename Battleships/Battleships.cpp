@@ -2,6 +2,7 @@
 #include "Grid.h"
 #include <iostream>
 #include "GameEngine.h"
+#include "Button.h"
 
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;
