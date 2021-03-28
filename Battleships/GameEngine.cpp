@@ -37,6 +37,7 @@ void GameEngine::run(sf::RenderWindow& window)
 				if (event.mouseButton.button == sf::Mouse::Button::Right)
 				{
 					if (dragShip) ships.getDraggedShip().rotate();
+					std::cout << ships.getDraggedShip().isHorizontal() << '\n';
 				}
 			}
 		}
@@ -49,6 +50,7 @@ void GameEngine::run(sf::RenderWindow& window)
 				ships.resetShips();
 				gridA.clearGrid();
 				buttons[0]->setString("not ready");
+				std::cout << "reset\n";
 			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
@@ -81,6 +83,7 @@ void GameEngine::run(sf::RenderWindow& window)
 				ships.stopDrag(gridA.canPlaceShip(ships.getDraggedShip()));
 				gridA.placeShip(ships.getDraggedShip());
 				dragShip = false;
+				std::cout << ships.getDraggedShip().isHorizontal() << '\n';
 			}
 		}
 

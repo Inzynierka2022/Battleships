@@ -108,5 +108,10 @@ void Ships::resetShips()
 	for (int i = 0; i < 10; i++)
 	{
 		shipsPlaced[i] = false;
+		if (!ships[i].isHorizontal())
+		{
+			ships[i].setOrientation(true);
+			//ships[i].rotate();
+		}
 	}
 }
