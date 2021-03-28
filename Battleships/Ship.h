@@ -7,6 +7,7 @@ private:
 	uint8_t type = 0;
 	bool horizontal = true;
 	sf::Texture* shipsTextures;
+	bool placed = false;
 public:
 	Ship();
 	Ship(uint8_t type, sf::Vector2f position);
@@ -18,5 +19,7 @@ public:
 	bool isHorizontal() const;
 	void rotate();
 	void setOrientation(bool _horizontal);
+	void setPlaced(bool _placed);
+	bool isPlaced();
 };
 

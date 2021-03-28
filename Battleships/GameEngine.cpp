@@ -37,7 +37,6 @@ void GameEngine::run(sf::RenderWindow& window)
 				if (event.mouseButton.button == sf::Mouse::Button::Right)
 				{
 					if (dragShip) ships.getDraggedShip().rotate();
-					std::cout << ships.getDraggedShip().isHorizontal() << '\n';
 				}
 			}
 		}
@@ -83,7 +82,6 @@ void GameEngine::run(sf::RenderWindow& window)
 				ships.stopDrag(gridA.canPlaceShip(ships.getDraggedShip()));
 				gridA.placeShip(ships.getDraggedShip());
 				dragShip = false;
-				std::cout << ships.getDraggedShip().isHorizontal() << '\n';
 			}
 		}
 

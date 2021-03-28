@@ -3,10 +3,6 @@
 
 Ships::Ships()
 {
-	for (int i = 0; i < 10; i++)
-	{
-		shipsPlaced[i] = false;
-	}
 	ships[0] = Ship(4, sf::Vector2f(50, 550));
 	ships[1] = Ship(3, sf::Vector2f(50, 600));
 	ships[2] = Ship(3, sf::Vector2f(180, 600));
@@ -16,17 +12,15 @@ Ships::Ships()
 	ships[6] = Ship(1, sf::Vector2f(50, 700));
 	ships[7] = Ship(1, sf::Vector2f(100, 700));
 	ships[8] = Ship(1, sf::Vector2f(150, 700));
-	ships[9] = Ship(1, sf::Vector2f(200, 700));
-
-	
+	ships[9] = Ship(1, sf::Vector2f(200, 700));	
 }
 
 void Ships::draw(sf::RenderWindow& window)
 {
-	for (int i = 0; i < 10; i++)
+	for (auto ship : ships)
 	{
-		//ships[i].setShipTexture(ships[i].getType());
-		ships[i].draw(window);
+		//ship.setShipTexture(ship.getType());
+		ship.draw(window);
 	}
 }
 
@@ -73,19 +67,19 @@ void Ships::stopDrag(bool canBePlaced)
 		ships[draggedShip].setOrientation(draggedShipOrientation);
 		return;
 	}
-	shipsPlaced[draggedShip] = true;
+	ships[draggedShip].setPlaced(true);
 }
 
 bool Ships::checkIfPlaced()
 {
-	return shipsPlaced[draggedShip];
+	return ships[draggedShip].isPlaced();
 }
 
 bool Ships::checkIfAllPlaced() const
 {
-	for (auto x : shipsPlaced)
+	for (auto x : ships)
 	{
-		if (!x)
+		if (!x.isPlaced())
 		{
 			return false;
 		}
@@ -107,7 +101,7 @@ void Ships::resetShips()
 	ships[9].setPosition(sf::Vector2i(200, 700));
 	for (int i = 0; i < 10; i++)
 	{
-		shipsPlaced[i] = false;
+		ships[i].setPlaced(false);
 		if (!ships[i].isHorizontal())
 		{
 			ships[i].setOrientation(true);

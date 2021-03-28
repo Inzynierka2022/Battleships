@@ -65,3 +65,13 @@ void Ship::setOrientation(bool _horizontal)
 	else
 		rectangle.setSize(sf::Vector2f(40, type * 40));
 }
+
+void Ship::setPlaced(bool _placed)
+{
+	placed = _placed;
+}
+
+bool Ship::isPlaced()
+{
+	return placed;
+}

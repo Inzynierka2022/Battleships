@@ -6,8 +6,6 @@ class Ships
 {
 private:
 	std::vector<Ship> ships = std::vector<Ship>(10);
-	std::array<bool, 10> shipsPlaced;
-
 
 	//dragging
 	int draggedShip = -1;

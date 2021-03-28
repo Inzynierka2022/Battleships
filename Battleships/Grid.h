@@ -22,7 +22,6 @@ private:
 	sf::Font font;
 	std::vector<sf::Text>xColumn;
 	std::vector<sf::Text>yColumn;
-	Ship lastCleared;
 public:
 	Grid(sf::Vector2i);
 	void draw(sf::RenderWindow& window);

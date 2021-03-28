@@ -48,10 +48,10 @@ Grid::Grid(sf::Vector2i position)
 		fields[x].resize(gridColumns, fieldType::Empty);
 		for (int y = 0; y < gridColumns; y++) {
 			tiles[x][y].setSize(sf::Vector2f(gridSize, gridSize));
-			tiles[x][y].setFillColor(sf::Color(0x39,0x47,0xb8,0xff));
+			tiles[x][y].setFillColor(sf::Color(0x39, 0x47, 0xb8, 0xff));
 			tiles[x][y].setOutlineThickness(-2.f);
 			//tiles[x][y].setOutlineColor(sf::Color(255, 0, 0, 127));
-			tiles[x][y].setOutlineColor(sf::Color(0x2e,0x3c,0xac, 0xff));
+			tiles[x][y].setOutlineColor(sf::Color(0x2e, 0x3c, 0xac, 0xff));
 			tiles[x][y].setPosition(x * gridSize + position.x, y * gridSize + position.y);
 		}
 	}
@@ -129,38 +129,30 @@ sf::Vector2i Grid::getHoveredTilePosition()
 
 
 void Grid::placeShip(Ship& s)
-{
-	if (canPlaceShip(s))
+{	
+	if (s.isPlaced())
 	{
+		int tileX = (s.getPosition().x - position.x) / gridSize;
+		int tileY = (s.getPosition().y - position.y) / gridSize;
 		for (int i = 0; i < s.getType(); i++)
 		{
 			if (s.isHorizontal())
-				fields[selectedTile.x + i][selectedTile.y] = fieldType::Ship;
-			else
-				fields[selectedTile.x][selectedTile.y + i] = fieldType::Ship;
-		}
-		return;
-	}
-	if (lastCleared.getType() != 0)
-	{
-		int tileX = (lastCleared.getPosition().x - position.x) / gridSize;
-		int tileY = (lastCleared.getPosition().y - position.y) / gridSize;
-		for (int i = 0; i < lastCleared.getType(); i++)
-		{
-			if (s.isHorizontal())
+			{
 				fields[tileX + i][tileY] = fieldType::Ship;
+			}
 			else
+			{
 				fields[tileX][tileY + i] = fieldType::Ship;
+			}
 		}
-		/*for (int j = 0; j < 10; j++) {
+		for (int j = 0; j < 10; j++) {
 			for (int i = 0; i < 10; i++) {
 				std::cout << (int)fields[i][j];
 			}
 			std::cout << std::endl;
 		}
-		std::cout << std::endl;*/
+		std::cout << std::endl;
 	}
-	
 }
 
 void Grid::clearSpace(Ship& s)
@@ -170,9 +162,12 @@ void Grid::clearSpace(Ship& s)
 	for (int i = 0; i < s.getType(); i++)
 	{
 		if (s.isHorizontal())
+		{
 			fields[tileX + i][tileY] = fieldType::Empty;
+		}
 		else
+		{
 			fields[tileX][tileY + i] = fieldType::Empty;
+		}
 	}
-	lastCleared = s;
 }
