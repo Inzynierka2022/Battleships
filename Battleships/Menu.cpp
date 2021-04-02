@@ -44,8 +44,8 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 	{
 		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "IP address"));
 		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "PIN"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70), "join"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70 + 70), "back"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 *2), "join"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*3), "back"));
 
 		//Agata tutaj dodajesz zamkniêcie menu przycisk
 		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
@@ -58,11 +58,34 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 	{
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "127.0.0.1"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "NEXT"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), "back"));
+
+		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			return Button::ButtonState::Terminate;
+		};
+
 	}
 	else if (this->menu_class == Menu::Stored_menu::waiting)
 	{
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "WAITING"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2+70), "127.0.0.1"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), "back"));
+
+		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			return Button::ButtonState::Terminate;
+		};
+	}
+	else if (this->menu_class == Menu::Stored_menu::scoreboard)
+	{
+
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x/1.75, windowSize.y-Button::rectangleSize.y), "back"));
+
+		this->elements[0]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			return Button::ButtonState::Terminate;
+		};
 	}
 	
 }
