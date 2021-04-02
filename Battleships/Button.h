@@ -4,6 +4,8 @@
 #include <SFML/Window.hpp>
 #include <string>
 #include <iostream>
+#include <functional>
+#include "Runnable.h"
 class Button
 {
 protected:
@@ -11,10 +13,23 @@ protected:
 	bool active;
 
 public:
+	//Used to return button status after click. Exit and back buttons return ButtonState::terminate
+	enum ButtonState
+	{
+		Terminate = 0,
+		Maintain,
+		Error
+	};
+
 	sf::RectangleShape rectangle;
 	sf::Text text;
 
+private:
+	std::shared_ptr<Runnable> runnable;
+	std::function<Button::ButtonState(sf::RenderWindow&, NetworkParameters)> functionality = [](sf::RenderWindow&, NetworkParameters) {return Button::ButtonState::Maintain; };
+
 public:
+
 	sf::Font font;
 	static std::string fontFile;
 	static sf::Vector2f rectangleSize;
@@ -27,6 +42,8 @@ public:
 	Button(const sf::Vector2f& position, std::string content);
 	virtual void draw(sf::RenderWindow& window);
 
+	
+
 	virtual void setPosition(const sf::Vector2f&);
 	sf::Vector2f getPosition() const;
 	void setString(const std::string &);
@@ -38,11 +55,13 @@ public:
 
 	void setSize(const sf::Vector2f&);
 
+	std::function<ButtonState(sf::RenderWindow&, NetworkParameters)>& on_click();
 	virtual void restoreColors();
 	virtual void hover();
 	virtual void add_character(const char&);
 	virtual bool is_active() const;
-	virtual void click();
+	virtual ButtonState click(sf::RenderWindow&, NetworkParameters);
 	virtual void deactivate();
+
 };
 

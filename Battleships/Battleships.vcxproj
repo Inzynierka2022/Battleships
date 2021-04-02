@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,7 +147,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Battleships.cpp" />
-
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -159,6 +159,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Package.h" />
+    <ClInclude Include="Runnable.h" />
     <ClInclude Include="TCPCommunicator.h" />
     <ClInclude Include="TextField.h" />
   </ItemGroup>

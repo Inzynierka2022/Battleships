@@ -1,11 +1,12 @@
 #pragma once
 #include "Button.h"
 #include "TextField.h"
+#include "Runnable.h"
 #include <iostream>
 #include <vector>
 #include <memory>
 
-class Menu
+class Menu : public Runnable
 {
 
 
@@ -28,7 +29,7 @@ public:
 
 private:
 	Stored_menu menu_class;
-	std::vector<std::shared_ptr<Menu>> sub_menus;
+	bool terminate;
 public:
 	Menu(Stored_menu, const sf::Vector2u&);
 	void draw(sf::RenderWindow&);

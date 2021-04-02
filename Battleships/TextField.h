@@ -24,7 +24,7 @@ public:
 	virtual void setPosition(const sf::Vector2f&);
 	void hover();
 	void restoreColors();
-	void click();
+	ButtonState click(sf::RenderWindow&, NetworkParameters);
 	void display_promt();
 
 

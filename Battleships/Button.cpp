@@ -10,6 +10,8 @@ int8_t Button::rectangleOutlineThickness = -5;
 
 
 
+
+
 Button::Button(const sf::Vector2f& position, std::string content)
 {
 	this->font.loadFromFile(Button::fontFile);
@@ -42,6 +44,11 @@ void Button::draw(sf::RenderWindow& window)
 {
 	window.draw(this->rectangle);
 	window.draw(this->text);
+}
+
+std::function<Button::ButtonState(sf::RenderWindow&, NetworkParameters)>& Button::on_click()
+{
+	return this->functionality;
 }
 
 sf::Vector2f Button::getPosition() const
@@ -91,8 +98,9 @@ void Button::hover()
 	this->invertColors();
 }
 
-void Button::click()
+Button::ButtonState Button::click(sf::RenderWindow& window, NetworkParameters parameters)
 {
+	return this->functionality(window, parameters);
 }
 
 sf::FloatRect Button::getLocalBounds()

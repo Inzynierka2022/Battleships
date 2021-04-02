@@ -87,12 +87,13 @@ void TextField::restoreColors()
 	this->rectangle.setOutlineColor(TextField::rectangleColor);
 }
 
-void TextField::click()
+Button::ButtonState TextField::click(sf::RenderWindow& unused1, NetworkParameters unused2)
 {
 	this->display_promt();
 	this->active = 1;
 	this->rectangle.setFillColor(TextField::transparent_color);
 	this->rectangle.setOutlineColor(TextField::transparent_color);
+	return Button::ButtonState::Maintain;
 }
 
 void TextField::setPosition(const sf::Vector2f& p)

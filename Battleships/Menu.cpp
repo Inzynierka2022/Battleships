@@ -2,20 +2,43 @@
 
 Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 {
+	this->terminate = 0;
+
 	if (this->menu_class == Menu::Stored_menu::main)
 	{
 		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x/2, windowSize.y / 2), "TYPE NAME"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "JOIN"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70), "CREATE GAME"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70 + 70), "SCOREBOARD"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*1), "JOIN"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*2), "CREATE GAME"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*3), "SCOREBOARD"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*4), "EXIT"));
 		
 		for (unsigned int i = 0; i < this->elements.size(); i++)
 		{
 			elements[i]->setPosition(sf::Vector2f(windowSize.x / 2, 140 + (70 * i)));
 		}
-
-		this->sub_menus.push_back(std::make_shared<Menu>(Menu::Stored_menu::join, windowSize));
-		this->sub_menus.push_back(std::make_shared<Menu>(Menu::Stored_menu::host, windowSize));
+		//Agata tutaj dajesz odpalenie kolejnego menu na przycisk
+		this->elements[1]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			Menu m(Menu::Stored_menu::join, window.getSize());
+			m.run(window);
+			return Button::ButtonState::Maintain;
+		};
+		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			Menu m(Menu::Stored_menu::host, window.getSize());
+			m.run(window);
+			return Button::ButtonState::Maintain;
+		};
+		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			Menu m(Menu::Stored_menu::scoreboard, window.getSize());
+			m.run(window);
+			return Button::ButtonState::Maintain;
+		};
+		this->elements[4]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			return Button::ButtonState::Terminate;
+		};
 	}
 	else if (this->menu_class == Menu::Stored_menu::join)
 	{
@@ -23,6 +46,13 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "PIN"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70), "join"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 + 70 + 70), "back"));
+
+		//Agata tutaj dodajesz zamkniêcie menu przycisk
+		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			return Button::ButtonState::Terminate;
+		};
+
 	}
 	else if (this->menu_class == Menu::Stored_menu::host)
 	{
@@ -47,7 +77,7 @@ void Menu::draw(sf::RenderWindow &window)
 
 void Menu::run(sf::RenderWindow& window)
 {
-	while (1)
+	while (!this->terminate)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -84,18 +114,6 @@ void Menu::run(sf::RenderWindow& window)
 
 void Menu::mouseEvent(const sf::Vector2f &mousePosition, sf::RenderWindow& window)
 {
-	if (elements[1]->getGlobalBounds().contains(mousePosition))
-	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			for (auto& elem : this->elements)
-			{
-				elem->deactivate();
-			}
-			this->sub_menus[0]->run(window);
-		}
-	}
-
 
 	for (auto& elem : this->elements)
 	{
@@ -108,7 +126,11 @@ void Menu::mouseEvent(const sf::Vector2f &mousePosition, sf::RenderWindow& windo
 				{
 					elem->deactivate();
 				}
-				elem->click();
+				NetworkParameters parameters;
+				if (elem->click(window, parameters) == Button::ButtonState::Terminate)
+				{
+					this->terminate = true;
+				}
 			}
 		}
 		else
