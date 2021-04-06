@@ -6,7 +6,7 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 
 	if (this->menu_class == Menu::Stored_menu::main)
 	{
-		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x/2, windowSize.y / 2), "TYPE NAME"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x/2, windowSize.y / 2+70*1), "TYPE NAME"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*1), "JOIN"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*2), "CREATE GAME"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*3), "SCOREBOARD"));
@@ -14,7 +14,7 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 		
 		for (unsigned int i = 0; i < this->elements.size(); i++)
 		{
-			elements[i]->setPosition(sf::Vector2f(windowSize.x / 2, 140 + (70 * i)));
+			elements[i]->setPosition(sf::Vector2f(windowSize.x / 2, 210 + (70 * i)));
 		}
 		//Agata tutaj dajesz odpalenie kolejnego menu na przycisk
 		this->elements[1]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
@@ -100,6 +100,13 @@ void Menu::draw(sf::RenderWindow &window)
 
 void Menu::run(sf::RenderWindow& window)
 {
+	sf::Texture texture;
+	if (!texture.loadFromFile("background.png"));
+	sf::Sprite sprite;
+	sprite.setTexture(texture);
+
+
+
 	while (!this->terminate)
 	{
 		sf::Event event;
@@ -127,8 +134,9 @@ void Menu::run(sf::RenderWindow& window)
 			}
 		}
 
-		window.clear();
 		this->mouseEvent((sf::Vector2f)sf::Mouse::getPosition(window), window);
+		window.clear();
+		window.draw(sprite);
 		this->draw(window);
 		window.display();
 		
