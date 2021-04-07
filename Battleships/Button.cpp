@@ -7,11 +7,6 @@ sf::Color Button::rectangleColor = sf::Color(0,0,255,128);
 sf::Color Button::textColor = sf::Color::White;
 int8_t Button::rectangleOutlineThickness = -5;
 
-
-
-
-
-
 Button::Button(const sf::Vector2f& position, std::string content)
 {
 	this->font.loadFromFile(Button::fontFile);

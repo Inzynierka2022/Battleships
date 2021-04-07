@@ -1,10 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include "Menu.h"
 #include "Grid.h"
+#include "Runnable.h"
 
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;
 
+NetworkParameters globalParameters;
 
 int main()
 {

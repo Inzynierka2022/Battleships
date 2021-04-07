@@ -6,10 +6,10 @@
 #include <vector>
 #include <memory>
 
+class ListenerMenu;
+
 class Menu : public Runnable
 {
-
-
 public:
 	enum Stored_menu
 	{
@@ -20,20 +20,17 @@ public:
 		waiting
 	};
 
-
-	/*Button join_button;
-	Button create_game_button;
-	Button scoreboard;
-	TextField type_name;*/
 	std::vector<std::shared_ptr<Button>> elements;
 
-private:
+protected:
+	Menu();
 	Stored_menu menu_class;
 	bool terminate;
 public:
 	Menu(Stored_menu, const sf::Vector2u&);
-	void draw(sf::RenderWindow&);
-	void run(sf::RenderWindow&);
+	virtual void draw(sf::RenderWindow&);
+	virtual void run(sf::RenderWindow&);
 	void mouseEvent(const sf::Vector2f&, sf::RenderWindow&);
 };
 
+#include "ListenerMenu.h"

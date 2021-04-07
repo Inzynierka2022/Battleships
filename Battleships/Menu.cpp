@@ -1,5 +1,10 @@
 #include "Menu.h"
 
+Menu::Menu()
+{
+	this->terminate = 0;
+}
+
 Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 {
 	this->terminate = 0;
@@ -56,10 +61,16 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 	}
 	else if (this->menu_class == Menu::Stored_menu::host)
 	{
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "127.0.0.1"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2),sf::IpAddress::getLocalAddress().toString()));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "NEXT"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), "back"));
 
+		this->elements[1]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			ListenerMenu menu(Menu::Stored_menu::waiting, window.getSize());
+			menu.run(window);
+			return Button::ButtonState::Terminate;
+		};
 		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 			return Button::ButtonState::Terminate;
@@ -68,8 +79,8 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 	}
 	else if (this->menu_class == Menu::Stored_menu::waiting)
 	{
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "WAITING"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2+70), "127.0.0.1"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "WRONG MENU CLASS, USE ListenerMenu Instead"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2+70), "ERR"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), "back"));
 
 		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
@@ -104,8 +115,6 @@ void Menu::run(sf::RenderWindow& window)
 	if (!texture.loadFromFile("background.png"));
 	sf::Sprite sprite;
 	sprite.setTexture(texture);
-
-
 
 	while (!this->terminate)
 	{

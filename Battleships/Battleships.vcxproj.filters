@@ -8,6 +8,8 @@
     <ClCompile Include="Package.cpp" />
     <ClCompile Include="TCPCommunicator.cpp" />
     <ClCompile Include="TextField.cpp" />
+    <ClCompile Include="Listener.cpp" />
+    <ClCompile Include="ListenerMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -17,5 +19,7 @@
     <ClInclude Include="TCPCommunicator.h" />
     <ClInclude Include="TextField.h" />
     <ClInclude Include="Runnable.h" />
+    <ClInclude Include="Listener.h" />
+    <ClInclude Include="ListenerMenu.h" />
   </ItemGroup>
 </Project>
