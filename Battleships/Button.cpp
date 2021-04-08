@@ -29,10 +29,8 @@ Button::Button(const sf::Vector2f& position, std::string content)
 
 void Button::calculateOrigin()
 {
-	this->text.setOrigin(sf::Vector2f(
-		this->text.getCharacterSize() * this->text.getString().getSize() / 2,
-		this->text.getCharacterSize() / 2 - this->rectangleOutlineThickness
-		));
+	sf::FloatRect textRect = text.getLocalBounds();
+	text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 }
 
 void Button::draw(sf::RenderWindow& window)

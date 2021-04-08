@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include <string>
 
 Menu::Menu()
 {
@@ -48,12 +49,13 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 	else if (this->menu_class == Menu::Stored_menu::join)
 	{
 		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "IP address"));
-		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "PIN"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 *2), "join"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*3), "back"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2+70), "port number"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*2), "PIN"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 *3), "join"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*4), "back"));
 
 		//Agata tutaj dodajesz zamkniêcie menu przycisk
-		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		this->elements[4]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 			return Button::ButtonState::Terminate;
 		};
@@ -62,16 +64,17 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 	else if (this->menu_class == Menu::Stored_menu::host)
 	{
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2),sf::IpAddress::getLocalAddress().toString()));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "NEXT"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), "back"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2+70*1),std::to_string(globalParameters.port)));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70*2), "NEXT"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 3), "back"));
 
-		this->elements[1]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 			ListenerMenu menu(Menu::Stored_menu::waiting, window.getSize());
 			menu.run(window);
 			return Button::ButtonState::Terminate;
 		};
-		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 			return Button::ButtonState::Terminate;
 		};
@@ -81,9 +84,10 @@ Menu::Menu(Stored_menu menu,const sf::Vector2u &windowSize) : menu_class(menu)
 	{
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "WRONG MENU CLASS, USE ListenerMenu Instead"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2+70), "ERR"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), "back"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), std::to_string(globalParameters.port)));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 3), "back"));
 
-		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 			return Button::ButtonState::Terminate;
 		};
