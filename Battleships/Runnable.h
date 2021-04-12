@@ -7,8 +7,9 @@
 struct NetworkParameters
 {
     std::string playerName;
-    sf::IpAddress ip = sf::IpAddress::getLocalAddress();
-    unsigned short port = 8888;
+    sf::IpAddress remoteIP = sf::IpAddress::getLocalAddress();
+    unsigned short remotePort = 8888;
+    unsigned short localPort = 8888;
     std::array<char, 4> pin = { '0', '0', '0', '0' };
 };
 

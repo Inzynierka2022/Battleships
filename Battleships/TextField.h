@@ -7,6 +7,7 @@ class TextField : public Button
 {
 private:
 	void backspace();
+	//std::function<void(std::string)> functionality = [](std::string text) {return ButtonState::Maintain; };
 protected:
 	sf::Text text1;
 public:
@@ -26,6 +27,7 @@ public:
 	void restoreColors();
 	ButtonState click(sf::RenderWindow&, NetworkParameters);
 	void display_promt();
+	std::function<void(std::string&)>& on_update();
 
 
 };

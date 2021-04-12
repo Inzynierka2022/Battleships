@@ -12,6 +12,8 @@ protected:
 	void calculateOrigin();
 	bool active;
 
+	std::function<void(std::string&)> functionality2 = [](std::string &text) {return; };
+
 public:
 	//Used to return button status after click. Exit and back buttons return ButtonState::terminate
 	enum ButtonState
@@ -27,6 +29,7 @@ public:
 private:
 	std::shared_ptr<Runnable> runnable;
 	std::function<Button::ButtonState(sf::RenderWindow&, NetworkParameters)> functionality = [](sf::RenderWindow&, NetworkParameters) {return Button::ButtonState::Maintain; };
+	
 
 public:
 
@@ -41,9 +44,6 @@ public:
 	Button();
 	Button(const sf::Vector2f& position, std::string content);
 	virtual void draw(sf::RenderWindow& window);
-
-	
-
 	virtual void setPosition(const sf::Vector2f&);
 	sf::Vector2f getPosition() const;
 	void setString(const std::string &);
@@ -55,7 +55,8 @@ public:
 
 	void setSize(const sf::Vector2f&);
 
-	std::function<ButtonState(sf::RenderWindow&, NetworkParameters)>& on_click();
+	virtual std::function<ButtonState(sf::RenderWindow&, NetworkParameters)>& on_click();
+	virtual std::function<void(std::string&)>& on_update();
 	virtual void restoreColors();
 	virtual void hover();
 	virtual void add_character(const char&);

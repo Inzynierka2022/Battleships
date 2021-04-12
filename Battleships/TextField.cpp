@@ -3,7 +3,7 @@
 sf::Color TextField::rectangleOutlineColor = sf::Color(0, 0, 255);
 sf::Color TextField::rectangleColor = sf::Color(0, 0, 255, 128);
 sf::Color TextField::color1 = sf::Color(0, 255, 0);
-sf::Color TextField::transparent_color = sf::Color::Transparent;
+sf::Color TextField::transparent_color = sf::Color(10, 10, 10);
 
 TextField::TextField(const sf::Vector2f& position, std::string content) : Button(position, content)
 {
@@ -33,6 +33,7 @@ void TextField::backspace()
 	if (tmp.size() > 0)
 	{
 		tmp.pop_back();
+		this->functionality2(tmp);
 		this->text.setString(tmp);
 		display_promt();
 
@@ -62,8 +63,11 @@ void TextField::add_character(const char &c)
 	
 	std::string tmp = this->text.getString();
 	tmp += c;
+
+	this->functionality2(tmp);
 	this->text.setString(tmp);
 	display_promt();
+
 }
 
 bool TextField::is_active() const
@@ -105,4 +109,9 @@ void TextField::setPosition(const sf::Vector2f& p)
 void TextField::display_promt()
 {
 	this->text1.setPosition(this->text.findCharacterPos(this->text.getString().getSize() + 2));
+}
+
+std::function<void(std::string&)>& TextField::on_update()
+{
+	return this->functionality2;
 }

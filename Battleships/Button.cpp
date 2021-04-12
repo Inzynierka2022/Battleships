@@ -2,7 +2,7 @@
 
 sf::Vector2f Button::rectangleSize = sf::Vector2f(350, 55);
 std::string Button::fontFile = "SM.TTF";
-sf::Color Button::rectangleOutlineColor = sf::Color::White;
+sf::Color Button::rectangleOutlineColor = sf::Color(50, 50, 100, 200);
 sf::Color Button::rectangleColor = sf::Color(0,0,255,128);
 sf::Color Button::textColor = sf::Color::White;
 int8_t Button::rectangleOutlineThickness = -5;
@@ -42,6 +42,11 @@ void Button::draw(sf::RenderWindow& window)
 std::function<Button::ButtonState(sf::RenderWindow&, NetworkParameters)>& Button::on_click()
 {
 	return this->functionality;
+}
+
+std::function<void(std::string&)>& Button::on_update()
+{
+	return this->functionality2;
 }
 
 sf::Vector2f Button::getPosition() const

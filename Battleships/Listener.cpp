@@ -12,7 +12,7 @@ Listener::Listener()
 		std::lock_guard<std::mutex> lock(this->terminateFlagMutex);
 		this->terminateFlag.store(false);
 	}
-	this->localPort = globalParameters.port;
+	this->localPort = globalParameters.remotePort;
 	this->pin = globalParameters.pin;
 	this->connected.store(false);
 }
