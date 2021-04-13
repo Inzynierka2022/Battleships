@@ -1,11 +1,11 @@
 #include "TextField.h"
 
-sf::Color TextField::rectangleOutlineColor = sf::Color(0, 0, 255);
+sf::Color TextField::rectangleOutlineColor = sf::Color(0, 0, 255,220);
 sf::Color TextField::rectangleColor = sf::Color(0, 0, 255, 128);
-sf::Color TextField::color1 = sf::Color(0, 255, 0);
+sf::Color TextField::color1 = sf::Color(255, 215, 0);
 sf::Color TextField::transparent_color = sf::Color(10, 10, 10);
 
-TextField::TextField(const sf::Vector2f& position, std::string content) : Button(position, content)
+TextField::TextField(const sf::Vector2f& position, std::string content, std::string constContent) : Button(position, content)
 {
 	this->active = 0;
 	this->rectangle.setSize(Button::rectangleSize);
@@ -19,11 +19,23 @@ TextField::TextField(const sf::Vector2f& position, std::string content) : Button
 	
 	this->text1.setFont(this->font);
 	this->display_promt();
+
+	this->text2.setFont(this->font);
+	this->text2.setCharacterSize(this->text.getCharacterSize());
+	this->text2.setString(constContent);
+	this->text2.setFillColor(sf::Color(50, 50, 50));
+	sf::FloatRect textRect = text2.getLocalBounds();
+	this->text2.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	//this->text2.setPosition(text.getPosition()-text2.getOrigin() - text2.getOrigin());
+	this->text2.setPosition({ position.x,position.y - rectangleSize.y });
+	//this->text2.setPosition(text.getPosition());
+
 }
 void TextField::draw(sf::RenderWindow& window)
 {
 	window.draw(this->rectangle);
 	window.draw(this->text);
+	window.draw(this->text2);
 	if (active) window.draw(this->text1);
 }
 

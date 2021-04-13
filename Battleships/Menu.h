@@ -10,6 +10,7 @@ class ListenerMenu;
 
 class Menu : public Runnable
 {
+
 public:
 	enum Stored_menu
 	{
@@ -26,6 +27,7 @@ protected:
 	Menu();
 	Stored_menu menu_class;
 	bool terminate;
+	bool is_pressed = true;
 public:
 	Menu(Stored_menu, const sf::Vector2u&);
 	virtual void draw(sf::RenderWindow&);

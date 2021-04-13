@@ -10,12 +10,13 @@ private:
 	//std::function<void(std::string)> functionality = [](std::string text) {return ButtonState::Maintain; };
 protected:
 	sf::Text text1;
+	sf::Text text2;
 public:
 	void add_character(const char&);
 	void draw(sf::RenderWindow& );
 	bool is_active() const;
 	
-	TextField(const sf::Vector2f&, std::string);
+	TextField(const sf::Vector2f&, std::string, std::string);
 
 	static sf::Color rectangleOutlineColor;
 	static sf::Color rectangleColor;
