@@ -3,6 +3,8 @@
 #include "TextField.h"
 #include "Runnable.h"
 #include "Joiner.h"
+#include "TCPCommunicator.h"
+#include "GameEngine.h"
 #include <iostream>
 #include <regex>
 #include <vector>

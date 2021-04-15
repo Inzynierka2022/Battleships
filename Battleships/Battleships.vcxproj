@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Battleships.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Joiner.cpp" />
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="ListenerMenu.cpp" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Joiner.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="ListenerMenu.h" />

@@ -2,9 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.h"
 #include "TCPCommunicator.h"
-#include <memory>
 #include "Ships.h"
 #include "Button.h"
+#include <memory>
+#include <thread>
 
 class GameEngine
 {
@@ -18,9 +19,10 @@ private:
 	1 - ready/waiting for opponent
 	*/
 	std::vector<Button*> buttons;
+	std::shared_ptr<TCPCommunicator> communicator;
 
 public:
-	GameEngine();
+	GameEngine(std::shared_ptr<TCPCommunicator>);
 	void run(sf::RenderWindow&/*,std::shared_ptr<TCPCommunicator> c*/);
 };
 

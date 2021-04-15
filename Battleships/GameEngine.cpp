@@ -1,8 +1,9 @@
 #include "GameEngine.h"
 #include <iostream>
 
-GameEngine::GameEngine()
+GameEngine::GameEngine(std::shared_ptr<TCPCommunicator> s)
 {
+	communicator = s;
 	gameState = 0;
 	Button* readyButton = new Button(sf::Vector2f(700,700),"not ready");
 	buttons.push_back(readyButton);
@@ -12,6 +13,8 @@ void GameEngine::run(sf::RenderWindow& window)
 {
 	bool dragShip = false;
 	bool buttonPressed = false;
+
+	std::thread communicator_thread(&TCPCommunicator::run, this->communicator);
 
 	while (window.isOpen())
 	{
@@ -93,4 +96,5 @@ void GameEngine::run(sf::RenderWindow& window)
 
 		window.display();
 	}
+	communicator_thread.join();
 }

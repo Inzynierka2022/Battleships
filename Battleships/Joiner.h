@@ -12,7 +12,7 @@ private:
 public:
 	std::shared_ptr<sf::TcpSocket> connect();
 	bool validatePin();
-
+	std::shared_ptr<sf::TcpSocket> getSocket();
 
 };
 
