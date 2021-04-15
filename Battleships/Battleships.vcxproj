@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -148,7 +148,6 @@
   <ItemGroup>
     <ClCompile Include="Battleships.cpp" />
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Joiner.cpp" />
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="ListenerMenu.cpp" />
@@ -162,11 +161,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
-    <ClInclude Include="GameEngine.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="Package.h" />
-    <ClInclude Include="Ship.h" />
-    <ClInclude Include="Ships.h" />
     <ClInclude Include="Joiner.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="ListenerMenu.h" />
@@ -174,6 +168,8 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Package.h" />
     <ClInclude Include="Runnable.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="Ships.h" />
     <ClInclude Include="TCPCommunicator.h" />
     <ClInclude Include="TextField.h" />
   </ItemGroup>
