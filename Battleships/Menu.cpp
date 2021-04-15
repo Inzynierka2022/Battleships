@@ -137,8 +137,9 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 	{
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1), sf::IpAddress::getLocalAddress().toString()));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), std::to_string(globalParameters.localPort)));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3), "NEXT"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4), "back"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3 + 35), arr_to_string(globalParameters.pin), "PIN"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4+35), "NEXT"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 5 + 35), "back"));
 
 		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
@@ -147,7 +148,7 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 			menu.run(window);
 			return Button::ButtonState::Terminate;
 		};
-		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		this->elements[4]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 			return Button::ButtonState::Terminate;
 		};
