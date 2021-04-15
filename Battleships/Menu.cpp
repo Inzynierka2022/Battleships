@@ -74,7 +74,12 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 
 		this->elements[0]->on_update() = [](std::string& text)
 		{
-			globalParameters.remoteIP = (sf::IpAddress)text;
+			std::regex ipv4("(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])");
+
+			if (regex_match(text, ipv4))
+			{
+				globalParameters.remoteIP = (sf::IpAddress)text;
+			}
 		};
 		this->elements[1]->on_update() = [](std::string& text)
 		{
@@ -110,7 +115,7 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 			Joiner joiner;
-			try 
+			try
 			{
 				joiner.connect();
 			}
@@ -130,7 +135,7 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 	}
 	else if (this->menu_class == Menu::Stored_menu::host)
 	{
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3+70*1), sf::IpAddress::getLocalAddress().toString()));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1), sf::IpAddress::getLocalAddress().toString()));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), std::to_string(globalParameters.localPort)));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3), "NEXT"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4), "back"));
@@ -215,7 +220,7 @@ void Menu::run(sf::RenderWindow& window)
 
 void Menu::mouseEvent(const sf::Vector2f& mousePosition, sf::RenderWindow& window)
 {
-	
+
 	for (auto& elem : this->elements)
 	{
 		if (elem->getGlobalBounds().contains(mousePosition))
@@ -238,13 +243,13 @@ void Menu::mouseEvent(const sf::Vector2f& mousePosition, sf::RenderWindow& windo
 
 					}
 				}
-					is_pressed = true;
+				is_pressed = true;
 
 			}
 			else
 			{
 				is_pressed = false;
-				
+
 			}
 		}
 		else

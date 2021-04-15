@@ -4,6 +4,7 @@
 #include "Runnable.h"
 #include "Joiner.h"
 #include <iostream>
+#include <regex>
 #include <vector>
 #include <memory>
 
