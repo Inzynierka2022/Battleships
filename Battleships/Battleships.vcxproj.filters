@@ -10,6 +10,7 @@
     <ClCompile Include="TextField.cpp" />
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="ListenerMenu.cpp" />
+    <ClCompile Include="Joiner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -21,5 +22,6 @@
     <ClInclude Include="Runnable.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="ListenerMenu.h" />
+    <ClInclude Include="Joiner.h" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,9 @@
 #pragma once
 #include <SFML/Network.hpp>
 #include "Runnable.h"
+#include "Package.h"
 #include <mutex>
+#include <sstream>
 #include <memory>
 
 class Listener

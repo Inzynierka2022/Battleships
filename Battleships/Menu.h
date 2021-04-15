@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "TextField.h"
 #include "Runnable.h"
+#include "Joiner.h"
 #include <iostream>
 #include <vector>
 #include <memory>

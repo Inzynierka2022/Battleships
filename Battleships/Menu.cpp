@@ -13,6 +13,7 @@ std::string arr_to_string(std::array<char, 4> arr)
 
 Menu::Menu()
 {
+	this->menu_class = Menu::main;
 	this->terminate = 0;
 }
 
@@ -104,6 +105,20 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 				globalParameters.pin[3] = text[3];
 			}
 
+		};
+
+		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			Joiner joiner;
+			try 
+			{
+				joiner.connect();
+			}
+			catch (std::string e)
+			{
+				std::cout << e << std::endl;
+			}
+			return Button::ButtonState::Terminate;
 		};
 
 		//Agata tutaj dodajesz zamkniêcie menu przycisk

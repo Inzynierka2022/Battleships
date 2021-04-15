@@ -8,7 +8,7 @@ ListenerMenu::ListenerMenu(Stored_menu menu, const sf::Vector2u& windowSize)
 	if (this->menu_class == Menu::Stored_menu::waiting)
 	{
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), "WAITING"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), "127.0.0.1"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70), sf::IpAddress::getLocalAddress().toString()));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 2 + 70 * 2), "back"));
 
 		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)

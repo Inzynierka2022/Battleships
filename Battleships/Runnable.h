@@ -2,7 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <array>
+#include <iostream>
 
+
+#define __WAITING_TIME_MS 2000
+#define __PIN_VALIDATION_TIME_MS 5000
 
 struct NetworkParameters
 {
@@ -11,6 +15,7 @@ struct NetworkParameters
     unsigned short remotePort = 8888;
     unsigned short localPort = 8888;
     std::array<char, 4> pin = { '0', '0', '0', '0' };
+    std::string lastErrorCode = "";
 };
 
 extern NetworkParameters globalParameters;
