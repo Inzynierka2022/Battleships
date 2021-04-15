@@ -1,22 +1,41 @@
 #pragma once
 #include "Button.h"
 #include "TextField.h"
+#include "Runnable.h"
+#include "Joiner.h"
 #include <iostream>
+#include <regex>
+#include <vector>
+#include <memory>
 
+class ListenerMenu;
 
-
-
-class Menu
+class Menu : public Runnable
 {
+
 public:
-	Button join_button;
-	Button create_game_button;
-	Button scoreboard;
-	TextField type_name;
-public:
+	enum Stored_menu
+	{
+		main,
+		join,
+		host,
+		scoreboard,
+		waiting
+	};
+
+	std::vector<std::shared_ptr<Button>> elements;
+
+protected:
 	Menu();
-	void draw(sf::RenderWindow&);
-	void run(sf::RenderWindow&);
-	void mouseEvent(const sf::Vector2f&);
+	Stored_menu menu_class;
+	bool terminate;
+	bool is_pressed = true;
+public:
+	Menu(Stored_menu, const sf::Vector2u&);
+	virtual void draw(sf::RenderWindow&);
+	virtual void run(sf::RenderWindow&);
+	void mouseEvent(const sf::Vector2f&, sf::RenderWindow&);
 };
+
+#include "ListenerMenu.h"
 
