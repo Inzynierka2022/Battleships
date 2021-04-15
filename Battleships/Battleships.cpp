@@ -1,18 +1,22 @@
-﻿#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
+#include "Menu.h"
 #include "Grid.h"
 #include <iostream>
 #include "GameEngine.h"
 #include "Button.h"
+#include "Runnable.h"
 
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;
-const int GRID_SIZE = 32;
+
+NetworkParameters globalParameters;
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Battleships");
 
-    GameEngine gameEngine;
-    gameEngine.run(window/*,communicator*/);
+    Menu menu(Menu::Stored_menu::main, window.getSize());
+    menu.run(window);
+	
     return 0;
 }
