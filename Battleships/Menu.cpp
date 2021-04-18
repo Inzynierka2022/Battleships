@@ -1,5 +1,8 @@
 #include "Menu.h"
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 std::string arr_to_string(std::array<char, 4> arr)
 {
@@ -9,6 +12,36 @@ std::string arr_to_string(std::array<char, 4> arr)
 		s += c;
 	}
 	return s;
+}
+std::string read_from_file(const std::string& fileName)
+{
+	std::string finishSt;
+	std::fstream myFile;
+	myFile.open(fileName, std::ios::in);
+	if (!myFile)
+	{
+		std::cout << "No such file";
+	}
+	else
+	{
+
+		for (int i=0; !myFile.eof(); i++)
+		{
+			std::string st;
+			myFile >> st;
+			st += "\t";
+			if (i % 4 == 3)
+			{
+				st += "\n\n";
+			}
+			finishSt += st;
+		}
+		std::cout << finishSt;
+
+	}
+	myFile.close();
+	return finishSt;
+	
 }
 
 Menu::Menu()
@@ -20,14 +53,16 @@ Menu::Menu()
 Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 {
 	this->terminate = 0;
+	this->labels.push_back(std::make_shared<Label>(sf::Vector2f(windowSize.x / 2 - 150, 150), ""));
 
 	if (this->menu_class == Menu::Stored_menu::main)
 	{
-		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1), "USER", "TYPE NAME"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1), "USER", "TYPE NAME:"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), "JOIN"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3), "CREATE GAME"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4), "SCOREBOARD"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 5), "EXIT"));
+
 
 		/*for (unsigned int i = 0; i < this->elements.size(); i++)
 			{
@@ -65,11 +100,14 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 	}
 	else if (this->menu_class == Menu::Stored_menu::join)
 	{
-		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3), "IP address", "IP addres"));
-		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 + 35), std::to_string(globalParameters.remotePort), "PORT"));
-		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + (70 + 35) * 2), arr_to_string(globalParameters.pin), "PIN"));
+
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3), "IP address", "IP addres:"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 + 35), std::to_string(globalParameters.remotePort), "PORT:"));
+		//this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + (70 + 35) * 2), arr_to_string(/*globalParameters.pin*/), "PIN:"));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + (70 + 35) * 2), arr_to_string(globalParameters.tmpPin), "PIN:"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + (70 + 35) * 2 + 70), "join"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + (70 + 35) * 2 + (70 * 2)), "back"));
+		//this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + (70 + 35) * 2), globalParameters.lastErrorCode));
 
 
 		this->elements[0]->on_update() = [](std::string& text)
@@ -104,6 +142,60 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 			if (text.size() > 4)text = text.substr(0, 4);
 			if (text.size() == 4)
 			{
+				globalParameters.tmpPin[0] = text[0];
+				globalParameters.tmpPin[1] = text[1];
+				globalParameters.tmpPin[2] = text[2];
+				globalParameters.tmpPin[3] = text[3];
+			}
+
+		};
+
+		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			if (globalParameters.pin == globalParameters.tmpPin)
+			{
+				Joiner joiner;
+				try
+				{
+					joiner.connect();
+				}
+				catch (std::string e)
+				{
+					globalParameters.lastErrorCode = e;
+				}
+				return Button::ButtonState::Terminate;
+			}
+			else
+			{
+				globalParameters.lastErrorCode = "Pin invalid";
+			}
+		};
+
+		//Agata tutaj dodajesz zamkniêcie menu przycisk
+		this->elements[4]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
+		{
+			globalParameters.lastErrorCode = "";
+			return Button::ButtonState::Terminate;
+		};
+
+	}
+	else if (this->menu_class == Menu::Stored_menu::host)
+	{
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1), sf::IpAddress::getLocalAddress().toString()));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), std::to_string(globalParameters.localPort)));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3 + 35), arr_to_string(globalParameters.pin), "PIN:"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4 + 35), "NEXT"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 5 + 35), "back"));
+
+		this->elements[0]->setCanHover(false);
+		this->elements[1]->setCanHover(false);
+
+		this->elements[2]->on_update() = [](std::string& text)
+		{
+			text.erase(std::remove_if(text.begin(), text.end(), [](unsigned char x) {return (x < 48 || x>57); }));
+			if (text.size() > 4)text = text.substr(0, 4);
+			if (text.size() == 4)
+			{
 				globalParameters.pin[0] = text[0];
 				globalParameters.pin[1] = text[1];
 				globalParameters.pin[2] = text[2];
@@ -114,35 +206,6 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 
 		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
-			Joiner joiner;
-			try
-			{
-				joiner.connect();
-			}
-			catch (std::string e)
-			{
-				std::cout << e << std::endl;
-			}
-			return Button::ButtonState::Terminate;
-		};
-
-		//Agata tutaj dodajesz zamkniêcie menu przycisk
-		this->elements[4]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
-		{
-			return Button::ButtonState::Terminate;
-		};
-
-	}
-	else if (this->menu_class == Menu::Stored_menu::host)
-	{
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1), sf::IpAddress::getLocalAddress().toString()));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), std::to_string(globalParameters.localPort)));
-		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3 + 35), arr_to_string(globalParameters.pin), "PIN"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4+35), "NEXT"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 5 + 35), "back"));
-
-		this->elements[2]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
-		{
 
 			ListenerMenu menu(Menu::Stored_menu::waiting, window.getSize());
 			menu.run(window);
@@ -150,17 +213,29 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 		};
 		this->elements[4]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
+			globalParameters.lastErrorCode = "";
 			return Button::ButtonState::Terminate;
 		};
 
 	}
 	else if (this->menu_class == Menu::Stored_menu::scoreboard)
 	{
+		std::string sc = "";
 
+		sf::Vector2f startIntPosition((Button::rectangleSize.x / 1.75) + 10, 210);
+	
+		sc = read_from_file("scoreboard.txt");
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75, windowSize.y - Button::rectangleSize.y), "back"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75, 200), sc));
+		this->elements[1]->setSize(sf::Vector2f(975, 500));
+		this->elements[1]->setCanHover(false);
+		this->elements[1]->text.setOrigin(sf::Vector2f(150,20));
+		this->elements[1]->text.setPosition(startIntPosition);
+		//this->elements[1]->setPosition((sf::Vector2f(windowSize.x / 2, 200)));
 
 		this->elements[0]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
+			globalParameters.lastErrorCode = "";
 			return Button::ButtonState::Terminate;
 		};
 	}
@@ -172,6 +247,10 @@ void Menu::draw(sf::RenderWindow& window)
 	for (auto& elem : this->elements)
 	{
 		elem->draw(window);
+	}
+	for (auto& label : this->labels)
+	{
+		label->draw(window);
 	}
 }
 
@@ -245,7 +324,10 @@ void Menu::mouseEvent(const sf::Vector2f& mousePosition, sf::RenderWindow& windo
 					}
 				}
 				is_pressed = true;
-
+				for (auto& label : labels)
+				{
+					label->updateContent();
+				}
 			}
 			else
 			{

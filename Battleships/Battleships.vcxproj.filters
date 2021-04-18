@@ -11,6 +11,7 @@
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="ListenerMenu.cpp" />
     <ClCompile Include="Joiner.cpp" />
+    <ClCompile Include="Label.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -23,5 +24,6 @@
     <ClInclude Include="Listener.h" />
     <ClInclude Include="ListenerMenu.h" />
     <ClInclude Include="Joiner.h" />
+    <ClInclude Include="Label.h" />
   </ItemGroup>
 </Project>
