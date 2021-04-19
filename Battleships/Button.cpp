@@ -97,6 +97,8 @@ void Button::setCanHover(bool b)
 	this->canHover = b;
 }
 
+
+
 void Button::hover()
 {
 	if (!canHover) return;

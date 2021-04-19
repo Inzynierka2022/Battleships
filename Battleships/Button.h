@@ -6,6 +6,7 @@ protected:
 	void calculateOrigin();
 	bool active;
 
+
 	std::function<void(std::string&)> functionality2 = [](std::string &text) {return; };
 	bool canHover = true;
 public:
