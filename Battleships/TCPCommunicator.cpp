@@ -19,6 +19,7 @@ void TCPCommunicator::send(Package package)
 TCPCommunicator::TCPCommunicator(std::shared_ptr<sf::TcpSocket> socket)
 {
 	this->socket = socket;
+	this->socket->setBlocking(false);
 	this->connected.store(true);
 }
 
