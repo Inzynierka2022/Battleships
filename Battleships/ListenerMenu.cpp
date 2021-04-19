@@ -63,7 +63,7 @@ void ListenerMenu::run(sf::RenderWindow& window)
 			std::cout << "Client connected" << std::endl;
 			//Start game here
 			std::shared_ptr<TCPCommunicator> communicator = std::make_shared<TCPCommunicator>(listener.getRemoteSocket());
-			GameEngine game_engine(communicator);
+			GameEngine game_engine(communicator,true);
 			game_engine.run(window);
 			this->terminate = true;
 		}

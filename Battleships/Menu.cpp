@@ -125,7 +125,7 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 				return Button::ButtonState::Terminate;
 			}
 			std::shared_ptr<TCPCommunicator> communicator = std::make_shared<TCPCommunicator>(joiner.getSocket());
-			GameEngine game_engine(communicator);
+			GameEngine game_engine(communicator, false);
 			game_engine.run(window);
 			return Button::ButtonState::Terminate;
 		};
@@ -144,7 +144,7 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3 + 35), arr_to_string(globalParameters.pin), "PIN"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4+35), "NEXT"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 5 + 35), "back"));
-
+		
 		this->elements[3]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
 

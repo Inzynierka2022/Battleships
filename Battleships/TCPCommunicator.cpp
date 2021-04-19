@@ -1,4 +1,5 @@
 #include "TCPCommunicator.h"
+#include <iostream>
 
 void TCPCommunicator::send(std::shared_ptr<std::vector<Package>> messages)
 {
@@ -53,14 +54,14 @@ void TCPCommunicator::run()
 			{
 				std::lock_guard<std::mutex> lock(this->in_queue_mutex);
 				this->in_queue.push_back(pack);
-
+				std::cout << pack.get_content() << '\n';
 				continue;
 			}
 		}
 		if (this->out_queue.size() > 0)
 		{
 			packet.clear();
-			
+			std::cout << out_queue.size() << '\n';
 			std::lock_guard<std::mutex> lock(this->out_queue_mutex);
 			packet << this->out_queue.front();
 			this->out_queue.erase(this->out_queue.begin());
