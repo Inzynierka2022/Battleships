@@ -150,7 +150,6 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Joiner.cpp" />
-    <ClCompile Include="Label.cpp" />
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="ListenerMenu.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -165,7 +164,6 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Joiner.h" />
-    <ClInclude Include="Label.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="ListenerMenu.h" />
     <ClInclude Include="Menu.h" />
