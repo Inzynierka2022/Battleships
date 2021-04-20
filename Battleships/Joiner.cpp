@@ -57,3 +57,8 @@ bool Joiner::validatePin()
     }
     return false;
 }
+
+std::shared_ptr<sf::TcpSocket> Joiner::getSocket()
+{
+    return this->socket;
+}

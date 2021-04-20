@@ -1,11 +1,11 @@
 #include "Button.h"
 
 sf::Vector2f Button::rectangleSize = sf::Vector2f(350, 55);
+std::string Button::fontFile = "SM.TTF";
 sf::Color Button::rectangleOutlineColor = sf::Color(50, 50, 100, 200);
 sf::Color Button::rectangleColor = sf::Color(0,0,255,128);
-int8_t Button::rectangleOutlineThickness = -5;
-std::string Button::fontFile = "SM.TTF";
 sf::Color Button::textColor = sf::Color::White;
+int8_t Button::rectangleOutlineThickness = -5;
 
 
 Button::Button(const sf::Vector2f& position, std::string content)
@@ -92,16 +92,8 @@ void Button::setSize(const sf::Vector2f &s)
 	this->calculateOrigin();
 }
 
-void Button::setCanHover(bool b)
-{
-	this->canHover = b;
-}
-
-
-
 void Button::hover()
 {
-	if (!canHover) return;
 	this->invertColors();
 }
 
@@ -120,10 +112,13 @@ sf::FloatRect Button::getGlobalBounds()
 	return this->rectangle.getGlobalBounds();
 }
 
+void Button::setString(const std::string& string)
+{
+	this->text.setString(string);
+}
+
 void Button::setPosition(const sf::Vector2f& pos)
 {
 	this->rectangle.setPosition(pos);
 	this->text.setPosition(pos);
 }
-
-

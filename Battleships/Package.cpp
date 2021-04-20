@@ -17,6 +17,16 @@ Package::Package(sf::Packet &packet)
 	packet >> this->content;
 }
 
+Package::Package(const std::string&s)
+{
+	this->content = s;
+}
+
+void Package::set_type_time(const int &i)
+{
+	this->content = "T"+std::to_string(i);
+}
+
 void Package::set_type_ping()
 {
 	this->content = "PING";

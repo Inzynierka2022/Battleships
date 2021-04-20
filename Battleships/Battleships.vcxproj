@@ -148,26 +148,30 @@
   <ItemGroup>
     <ClCompile Include="Battleships.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Joiner.cpp" />
-    <ClCompile Include="Label.cpp" />
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="ListenerMenu.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Package.cpp" />
+    <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="Ships.cpp" />
     <ClCompile Include="TCPCommunicator.cpp" />
     <ClCompile Include="TextField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Joiner.h" />
-    <ClInclude Include="Label.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="ListenerMenu.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Package.h" />
     <ClInclude Include="Runnable.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="Ships.h" />
     <ClInclude Include="TCPCommunicator.h" />
     <ClInclude Include="TextField.h" />
   </ItemGroup>
