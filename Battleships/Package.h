@@ -16,6 +16,7 @@ public:
 	Package(sf::Packet&);
 	Package(const std::string&);
 	
+	void set_type_starting_player(const bool);
 	void set_type_time(const int&);
 	void set_type_ping();
 	void set_type_pong();

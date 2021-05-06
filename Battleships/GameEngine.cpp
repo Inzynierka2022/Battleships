@@ -8,6 +8,8 @@ GameEngine::GameEngine(std::shared_ptr<TCPCommunicator> s, bool hosting)
 	gameState = 0;
 	Button* readyButton = new Button(sf::Vector2f(700,700),"not ready");
 	buttons.push_back(readyButton);
+	Button* timer = new Button(sf::Vector2f(700, 600), "60");
+	buttons.push_back(timer);
 }
 
 GameEngine::~GameEngine()
@@ -72,21 +74,45 @@ void GameEngine::run(sf::RenderWindow& window)
 				}
 			}
 		}
+		
+		if(isHost)
+		{
+			if (gameState == 0 || gameState == 1)
+			{
+				if (timer.getElapsedTime().asSeconds() >= 1.f)
+				{
 
-		if (gameState < 2)
+				}
+			}
+			else if (gameState == 2)
+			{
+				if (timer.getElapsedTime().asSeconds() >= 1.f)
+				{
+
+				}
+			}
+			else if (gameState == 3)
+			{
+
+			}
+		}
+		
+		if (gameState < 2 && isHost)
 		{
 			if (timer.getElapsedTime().asSeconds() >= 1.f)
 			{
 				time_counter++;
 				timer.restart();
 				//std::cout << this->time_to_start - time_counter << '\n';
+				this->remainingTime = this->time_to_start - time_counter;
 				Package package;
-				package.set_type_time(this->time_to_start - time_counter);
+				package.set_type_time(this->remainingTime);
 				communicator->send(package);
+				this->setTime(this->remainingTime);
 			}
 			if (time_counter == this->time_to_start)
 			{
-				gameState = 3;
+				gameState = 2;
 			}
 		}
 
@@ -138,7 +164,10 @@ void GameEngine::run(sf::RenderWindow& window)
 		gridB.draw(window);
 
 		ships.draw(window);
-		buttons[0]->draw(window);
+		for (auto x : buttons)
+		{
+			x->draw(window);
+		}
 
 		window.display();
 	}
@@ -162,13 +191,13 @@ void GameEngine::managePackages()
 	for (auto& x : *this->packages)
 	{
 		std::string tmp = x.get_content();
-		std::cout << tmp << '\n';
+		//std::cout << tmp << '\n';
 		switch (tmp[0])
 		{
 		case 'T':
 			//czas
 			this->remainingTime = std::stoi(tmp.substr(1, tmp.size() - 1));
-			std::cout << this->remainingTime << '\n';
+			this->setTime(this->remainingTime);
 			break;
 		case 'P':
 			//pozycja statku
@@ -177,3 +206,12 @@ void GameEngine::managePackages()
 	}
 }
 
+void GameEngine::setTime(int time)
+{
+	buttons[1]->setString(std::to_string(time));
+}
+
+void GameEngine::changeTurn()
+{
+	this->turn = !turn;
+}

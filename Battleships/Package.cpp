@@ -22,6 +22,11 @@ Package::Package(const std::string&s)
 	this->content = s;
 }
 
+void Package::set_type_starting_player(const bool b)
+{
+	this->content = "B" + std::to_string(b);
+}
+
 void Package::set_type_time(const int &i)
 {
 	this->content = "T"+std::to_string(i);
