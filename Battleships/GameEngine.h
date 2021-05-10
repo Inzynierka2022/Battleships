@@ -30,6 +30,7 @@ private:
 
 public:
 	const int time_to_start = 60;
+	const int turn_time = 30;
 	GameEngine(std::shared_ptr<TCPCommunicator>,bool);
 	~GameEngine();
 	void run(sf::RenderWindow&/*,std::shared_ptr<TCPCommunicator> c*/);

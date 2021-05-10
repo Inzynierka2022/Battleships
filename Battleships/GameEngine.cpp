@@ -29,19 +29,26 @@ void GameEngine::run(sf::RenderWindow& window)
 	std::thread communicator_thread(&TCPCommunicator::run, this->communicator);
 	//receive
 	sf::Clock timer;
+	//buttons pressed
+	bool lpm = false;
+
 	if (isHost)
 	{
 		turn = this->chooseStartingPlayer();
-		if (turn)
+		/*if (turn)
 		{
-			Package package("true");
+			Package package;
+			package.set_type_starting_player(turn);
 			this->communicator->send(package);
 		}
 		else
 		{
 			Package package("false");
 			this->communicator->send(package);
-		}
+		}*/
+		Package package;
+		package.set_type_starting_player(turn);
+		this->communicator->send(package);
 		
 	}
 	timer.restart();
@@ -58,19 +65,38 @@ void GameEngine::run(sf::RenderWindow& window)
 			{
 				if (event.mouseButton.button == sf::Mouse::Button::Left) 
 				{
-					if (ships.drag(sf::Mouse::getPosition(window), sf::Mouse::getPosition(window)))
+					if (this->gameState == 0)
 					{
-						dragShip = true;
-						if (ships.checkIfPlaced())
+						if (ships.drag(sf::Mouse::getPosition(window), sf::Mouse::getPosition(window)))
 						{
-							gridA.clearSpace(ships.getDraggedShip());
+							dragShip = true;
+							if (ships.checkIfPlaced())
+							{
+								gridA.clearSpace(ships.getDraggedShip());
+							}
 						}
 					}
+					else if (this->gameState == 3)
+					{
+						if (!lpm)
+						{
+							lpm = true;
+							auto x = sf::Mouse::getPosition(window);
+
+						}
+					}
+				}
+				else
+				{
+					lpm = false;
 				}
 
 				if (event.mouseButton.button == sf::Mouse::Button::Right)
 				{
-					if (dragShip) ships.getDraggedShip().rotate();
+					if (this->gameState==0)
+					{
+						if (dragShip) ships.getDraggedShip().rotate();
+					}
 				}
 			}
 		}
@@ -81,23 +107,62 @@ void GameEngine::run(sf::RenderWindow& window)
 			{
 				if (timer.getElapsedTime().asSeconds() >= 1.f)
 				{
-
+					time_counter++;
+					timer.restart();
+					this->remainingTime = this->time_to_start - time_counter;
+					Package package;
+					if (remainingTime >= 0)
+					{
+						package.set_type_time(this->remainingTime);
+						this->setTime(this->remainingTime);
+					}
+					else
+					{
+						//tutaj automatyczne losowanie pozycji statków
+						//je¿eli niewylosowane
+						//
+						package.set_type_time(30);
+						this->setTime(30);
+						gameState = 2;
+						time_counter = 0;
+					}
+					communicator->send(package);
 				}
 			}
 			else if (gameState == 2)
 			{
+				//trwa gra
 				if (timer.getElapsedTime().asSeconds() >= 1.f)
 				{
-
+					time_counter++;
+					timer.restart();
+					this->remainingTime = turn_time - time_counter;
+					Package package;
+					if (remainingTime >= 0)
+					{
+						package.set_type_time(this->remainingTime);
+						this->setTime(this->remainingTime);
+					}
+					else
+					{
+						//tutaj automatyczny ruch
+						//je¿eli nie wybrany
+						//
+						package.set_type_time(30);
+						this->setTime(30);
+						time_counter = 0;
+					}
+					communicator->send(package);
 				}
 			}
 			else if (gameState == 3)
 			{
-
+				//koniec gry
 			}
+
 		}
 		
-		if (gameState < 2 && isHost)
+		/*if (gameState < 2 && isHost)
 		{
 			if (timer.getElapsedTime().asSeconds() >= 1.f)
 			{
@@ -114,7 +179,7 @@ void GameEngine::run(sf::RenderWindow& window)
 			{
 				gameState = 2;
 			}
-		}
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
