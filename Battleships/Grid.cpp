@@ -122,6 +122,33 @@ bool Grid::canPlaceShip(Ship& s)
 	return false;
 }
 
+
+bool Grid::canPlaceShipOnPosition(Ship& s, int x, int y)
+{
+	if (s.getType() == 1)
+	{
+		if (isFree(sf::Vector2i(x,y))) return true;
+	}
+	else
+	{
+		if (s.isHorizontal())
+		{
+			if (isFree(sf::Vector2i(x, y)) && isFree(sf::Vector2i(x + s.getType() - 1, y)))
+				return true;
+		}
+		else {
+			if (isFree(sf::Vector2i(x, y)) && isFree(sf::Vector2i(x, y + s.getType() - 1)))
+				return true;
+		}
+	}
+	return false;
+}
+
+sf::Vector2i Grid::getTilePosition(int x, int y)
+{
+	return (sf::Vector2i)tiles[x][y].getPosition();
+}
+
 sf::Vector2i Grid::getHoveredTilePosition()
 {
 	return (sf::Vector2i)tiles[selectedTile.x][selectedTile.y].getPosition();
@@ -152,6 +179,22 @@ void Grid::placeShip(Ship& s)
 			std::cout << std::endl;
 		}
 		std::cout << std::endl;
+	}
+}
+
+
+void Grid::placeShipOnPosition(Ship& s, int x, int y)
+{
+	for (int i = 0; i < s.getType(); i++)
+	{
+		if (s.isHorizontal())
+		{
+			fields[x + i][y] = fieldType::Ship;
+		}
+		else
+		{
+			fields[x][y + i] = fieldType::Ship;
+		}
 	}
 }
 

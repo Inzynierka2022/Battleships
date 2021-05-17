@@ -61,9 +61,15 @@ void Ship::setOrientation(bool _horizontal)
 {
 	horizontal = _horizontal;
 	if (horizontal)
+	{
 		rectangle.setSize(sf::Vector2f(type * 40, 40));
+		rectangle.setTextureRect(sf::IntRect(0, 40 * (type - 1), 40 * type, 40));
+	}
 	else
+	{
 		rectangle.setSize(sf::Vector2f(40, type * 40));
+		rectangle.setTextureRect(sf::IntRect(40 * type, 0, 40, 40 * type));
+	}
 }
 
 void Ship::setPlaced(bool _placed)

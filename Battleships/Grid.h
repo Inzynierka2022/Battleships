@@ -27,8 +27,11 @@ public:
 	void draw(sf::RenderWindow& window);
 	void tileSelect(sf::Vector2i mousePos);
 	bool canPlaceShip(Ship& s);
+	bool canPlaceShipOnPosition(Ship& s, int x, int y);
 	void placeShip(Ship& s);
+	void placeShipOnPosition(Ship& s, int x, int y);
 	void clearSpace(Ship& s);
+	sf::Vector2i getTilePosition(int x, int y);
 	sf::Vector2i getHoveredTilePosition();
 	void clearGrid();
 };

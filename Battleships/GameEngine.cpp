@@ -99,6 +99,11 @@ void GameEngine::run(sf::RenderWindow& window)
 					}
 				}
 			}
+			else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+			{
+				if (this->gameState == 0)
+					ships.randomize(this->gridA);
+			}
 		}
 		
 		if(isHost)
@@ -119,6 +124,7 @@ void GameEngine::run(sf::RenderWindow& window)
 					else
 					{
 						//tutaj automatyczne losowanie pozycji statków
+						this->ships.randomize(gridA);
 						//je¿eli niewylosowane
 						//
 						package.set_type_time(30);
