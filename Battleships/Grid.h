@@ -22,6 +22,10 @@ private:
 	sf::Font font;
 	std::vector<sf::Text>xColumn;
 	std::vector<sf::Text>yColumn;
+	
+	sf::Texture texture;
+	sf::Sprite bombed;
+	//wektor pozosta³ych pól
 public:
 	Grid(sf::Vector2i);
 	void draw(sf::RenderWindow& window);
@@ -34,5 +38,10 @@ public:
 	sf::Vector2i getTilePosition(int x, int y);
 	sf::Vector2i getHoveredTilePosition();
 	void clearGrid();
+	bool bomb_tile();
+	int getTile();
+	bool checkTile(const int&);
+	void changeField(const int&,const bool&);
+	void drawMarkers(sf::RenderWindow& window);
 };
 
