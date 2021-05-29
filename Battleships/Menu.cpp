@@ -1,5 +1,8 @@
 #include "Menu.h"
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 std::string arr_to_string(std::array<char, 4> arr)
 {
@@ -10,6 +13,39 @@ std::string arr_to_string(std::array<char, 4> arr)
 	}
 	return s;
 }
+
+std::array<std::string, 4> read_from_file1(const std::string& fileName)
+{
+	std::array<std::string, 4> rff;
+	std::fstream myFile;
+	myFile.open(fileName, std::ios::in);
+	if (!myFile)
+	{
+		std::cout << "No such file";
+	}
+	else
+	{
+
+		for (int i = 0; !myFile.eof(); i++)
+		{
+			std::string st;
+			myFile >> st;
+			rff[0] += st + "\n\n";
+			myFile >> st;
+			rff[1] += st + "\n\n";
+			myFile >> st;
+			rff[2] += st + "\n\n";
+			myFile >> st;
+			rff[3] += st + "\n\n";
+		}
+
+
+	}
+	myFile.close();
+	return rff;
+
+}
+
 
 Menu::Menu()
 {
@@ -141,10 +177,14 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 	}
 	else if (this->menu_class == Menu::Stored_menu::host)
 	{
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1), sf::IpAddress::getLocalAddress().toString()));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), std::to_string(globalParameters.localPort)));
+		//this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1 - 35), sf::IpAddress::getLocalAddress().toString()));
+		//this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), "8888", "PORT: "));
+
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 1-35), sf::IpAddress::getLocalAddress().toString()));
+		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 2), std::to_string(globalParameters.localPort), "PORT: "));
+		
 		this->elements.push_back(std::make_shared<TextField>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 3 + 35), arr_to_string(globalParameters.pin), "PIN"));
-		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4+35), "NEXT"));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 4 + 35), "NEXT"));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(windowSize.x / 2, windowSize.y / 3 + 70 * 5 + 35), "back"));
 
 		this->elements[0]->setCanHover(false);
@@ -196,11 +236,36 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 	}
 	else if (this->menu_class == Menu::Stored_menu::scoreboard)
 	{
-
+		std::array<std::string, 4> r = read_from_file1("scoreboard.txt");
+		
+		sf::Vector2f startIntPosition((Button::rectangleSize.x / 1.75) + 10, 200);
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75, windowSize.y - Button::rectangleSize.y), "back"));
+
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75, 200), r[0]));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75 - 1250, 200), r[1]));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75 - 1250, 200), r[2]));
+		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75 - 1250, 200), r[3]));
+
+		this->elements[1]->setSize(sf::Vector2f(975, 500));
+
+		for (int i = 1; i <= 4; i++)
+		{
+
+			this->elements[i]->setCanHover(false);
+			this->elements[i]->text.setOrigin(sf::Vector2f(150, 20));
+			if (i > 2)
+			{
+				this->elements[i]->text.setPosition(startIntPosition.x + (i * 300) - 500, startIntPosition.y);
+			}
+			else if (i == 2)
+			{
+				this->elements[i]->text.setPosition(startIntPosition.x + (i * 50), startIntPosition.y);
+			}
+		}
 
 		this->elements[0]->on_click() = [](sf::RenderWindow& window, NetworkParameters parameters)
 		{
+			globalParameters.lastErrorCode = "";
 			return Button::ButtonState::Terminate;
 		};
 	}
@@ -212,6 +277,11 @@ void Menu::draw(sf::RenderWindow& window)
 	for (auto& elem : this->elements)
 	{
 		elem->draw(window);
+
+	}
+	for (auto& label : this->labels)
+	{
+		label->draw(window);
 	}
 }
 
@@ -285,7 +355,10 @@ void Menu::mouseEvent(const sf::Vector2f& mousePosition, sf::RenderWindow& windo
 					}
 				}
 				is_pressed = true;
-
+				for (auto& label : labels)
+				{
+					label->updateContent();
+				}
 			}
 			else
 			{

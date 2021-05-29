@@ -1,6 +1,6 @@
 #include "Label.h"
 
-std::string Label::fontFile = "FELIXTI.ttf";
+std::string Label::fontFile = "SM.ttf";
 sf::Color Label::textColor = sf::Color::Red;
 
 Label::Label()
