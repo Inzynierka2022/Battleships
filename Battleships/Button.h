@@ -5,6 +5,7 @@ class Button : public Label
 protected:
 	void calculateOrigin();
 	bool active;
+	bool canHover;
 
 	std::function<void(std::string&)> functionality2 = [](std::string &text) {return; };
 
@@ -44,11 +45,14 @@ public:
 
 	sf::FloatRect getLocalBounds();
 	sf::FloatRect getGlobalBounds();
-	
+
+	void setString(const std::string& string);
+	void setCanHover(bool);
 	void setSize(const sf::Vector2f&);
 
 	virtual std::function<ButtonState(sf::RenderWindow&, NetworkParameters)>& on_click();
 	virtual std::function<void(std::string&)>& on_update();
+	sf::Vector2f getPosition() const;
 	virtual void restoreColors();
 	virtual void hover();
 	virtual void add_character(const char&);

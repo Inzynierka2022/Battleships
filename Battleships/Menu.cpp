@@ -118,10 +118,12 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 			try
 			{
 				joiner.connect();
+				return Button::ButtonState::Maintain;
 			}
 			catch (std::string e)
 			{
 				globalParameters.lastErrorCode = "Pin invalid";
+				return Button::ButtonState::Terminate;
 			}
 		};
 
