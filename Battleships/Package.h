@@ -16,6 +16,10 @@ public:
 	Package(sf::Packet&);
 	Package(const std::string&);
 	
+	void set_type_hit(const int&);
+	void set_type_answer(const std::string&);
+	void set_type_start_game();
+	void set_type_starting_player(const std::string&);
 	void set_type_time(const int&);
 	void set_type_ping();
 	void set_type_pong();

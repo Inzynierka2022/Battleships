@@ -2,6 +2,7 @@
 #include "Ship.h"
 #include <vector>
 #include <array>
+#include "Grid.h"
 class Ships
 {
 private:
@@ -21,5 +22,6 @@ public:
 	bool drag(sf::Vector2i mousePosition, sf::Vector2i tilePosition, bool legalTile = false);
 	void stopDrag(bool canBePlaced);
 	bool checkIfAllPlaced() const;
+	void randomize(Grid& g);
 	void resetShips();
 };

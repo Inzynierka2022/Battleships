@@ -87,6 +87,32 @@ bool Ships::checkIfAllPlaced() const
 	return true;
 }
 
+void Ships::randomize(Grid& g)
+{
+	g.clearGrid();
+	this->resetShips();
+	int x, y;
+	bool placed, orientation;
+	for (int i = 0; i < 10; i++)
+	{
+		placed = false;
+		while (!placed)
+		{
+			x = rand() % 10;
+			y = rand() % 10;
+			orientation = rand() % 2;
+			ships[i].setOrientation(orientation);
+			if (g.canPlaceShipOnPosition(ships[i], x, y))
+			{
+				g.placeShipOnPosition(ships[i], x, y);
+				ships[i].setPosition(g.getTilePosition(x,y));
+				ships[i].setPlaced(true);
+				placed = true;
+			}
+		}
+	}
+}
+
 void Ships::resetShips()
 {
 	ships[0].setPosition(sf::Vector2i(50, 550));

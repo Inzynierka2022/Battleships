@@ -3,7 +3,7 @@
 sf::Color TextField::rectangleOutlineColor = sf::Color(0, 0, 255,220);
 sf::Color TextField::rectangleColor = sf::Color(0, 0, 255, 128);
 sf::Color TextField::color1 = sf::Color(255, 215, 0);
-sf::Color TextField::transparent_color = sf::Color(30, 30, 30);
+sf::Color TextField::transparent_color = sf::Color(10, 10, 10);
 
 TextField::TextField(const sf::Vector2f& position, std::string content, std::string constContent) : Button(position, content)
 {

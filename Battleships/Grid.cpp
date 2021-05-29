@@ -37,8 +37,89 @@ void Grid::clearGrid()
 	}
 }
 
+bool Grid::bomb_tile() // do wywalenia
+{
+	if (this->isAnySelected)
+	{
+		int tile_number = (selectedTile.y * 10) + selectedTile.x;
+	}
+	return false;
+}
+
+int Grid::getTile()
+{
+	int tile_number = -1;
+	//std::cout << "anyselected" << isAnySelected << '\n';
+	if (fields[selectedTile.x][selectedTile.y] == fieldType::Hit || fields[selectedTile.x][selectedTile.y] == fieldType::Miss)
+	{
+		return tile_number;
+	}
+	/*for (int i = 0; i < gridColumns; i++)
+	{
+		for (int j = 0; j < gridRows; j++)
+		{
+			if (fields[selectedTile.x][selectedTile.y] == fieldType::Hit || fields[i][j] == fieldType::Miss)
+			{
+				return tile_number;
+			}
+		}
+	}*/
+	if (this->isAnySelected)
+	{
+		tile_number = (selectedTile.y * 10) + selectedTile.x;
+		std::cout << tile_number << '\n';
+	}
+	return tile_number;
+}
+
+bool Grid::checkTile(const int &tile)
+{
+	bool result = false;
+	if (fields[tile % 10][tile / 10] == fieldType::Ship)
+	{
+		result = true;
+		fields[tile % 10][tile / 10] = fieldType::Hit;
+	}
+	else
+	{
+		result = false;
+		fields[tile % 10][tile / 10] = fieldType::Empty;
+	}
+	return result;
+}
+
+void Grid::changeField(const int&i, const bool&b)
+{
+	if (b) fields[i % 10][i / 10] = fieldType::Hit;
+	else fields[i % 10][i / 10] = fieldType::Miss;
+}
+
+void Grid::drawMarkers(sf::RenderWindow& window)
+{
+	for (int x = 0; x < gridRows; x++) 
+	{
+		for (int y = 0; y < gridColumns; y++) 
+		{
+			if (fields[x][y] == fieldType::Miss)
+			{
+				bombed.setTextureRect(sf::IntRect(240, 0, 40, 40));
+				bombed.setPosition(tiles[x][y].getPosition());
+				window.draw(bombed);
+			}
+			else if (fields[x][y] == fieldType::Hit)
+			{
+				bombed.setTextureRect(sf::IntRect(200, 0, 40, 40));
+				bombed.setPosition(tiles[x][y].getPosition());
+				window.draw(bombed);
+			}
+		}
+	}
+}
+
 Grid::Grid(sf::Vector2i position)
 {
+	texture.loadFromFile("ships.png");
+	bombed.setTexture(texture);
 	this->position = position;
 	tiles.resize(gridRows, std::vector<sf::RectangleShape>());
 	fields.resize(gridRows, std::vector<fieldType>());
@@ -122,6 +203,33 @@ bool Grid::canPlaceShip(Ship& s)
 	return false;
 }
 
+
+bool Grid::canPlaceShipOnPosition(Ship& s, int x, int y)
+{
+	if (s.getType() == 1)
+	{
+		if (isFree(sf::Vector2i(x,y))) return true;
+	}
+	else
+	{
+		if (s.isHorizontal())
+		{
+			if (isFree(sf::Vector2i(x, y)) && isFree(sf::Vector2i(x + s.getType() - 1, y)))
+				return true;
+		}
+		else {
+			if (isFree(sf::Vector2i(x, y)) && isFree(sf::Vector2i(x, y + s.getType() - 1)))
+				return true;
+		}
+	}
+	return false;
+}
+
+sf::Vector2i Grid::getTilePosition(int x, int y)
+{
+	return (sf::Vector2i)tiles[x][y].getPosition();
+}
+
 sf::Vector2i Grid::getHoveredTilePosition()
 {
 	return (sf::Vector2i)tiles[selectedTile.x][selectedTile.y].getPosition();
@@ -152,6 +260,22 @@ void Grid::placeShip(Ship& s)
 			std::cout << std::endl;
 		}
 		std::cout << std::endl;
+	}
+}
+
+
+void Grid::placeShipOnPosition(Ship& s, int x, int y)
+{
+	for (int i = 0; i < s.getType(); i++)
+	{
+		if (s.isHorizontal())
+		{
+			fields[x + i][y] = fieldType::Ship;
+		}
+		else
+		{
+			fields[x][y + i] = fieldType::Ship;
+		}
 	}
 }
 

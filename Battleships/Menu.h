@@ -26,8 +26,6 @@ public:
 	};
 
 	std::vector<std::shared_ptr<Button>> elements;
-	std::vector<std::shared_ptr<Label>> labels;
-
 
 protected:
 	Menu();

@@ -21,17 +21,25 @@ private:
 	/*
 	0 - placing ships
 	1 - ready/waiting for opponent
+	2 - playing game
+	3 - game finished
 	*/
 	std::vector<Button*> buttons;
 	std::shared_ptr<TCPCommunicator> communicator;
 	std::shared_ptr<std::vector<Package>> packages;
 
+	sf::Clock timer;
+	int time_counter = 0;
+
 public:
-	const int time_to_start = 60;
+	const int time_to_start = 5; //60
+	const int turn_time = 5; //30
 	GameEngine(std::shared_ptr<TCPCommunicator>,bool);
 	~GameEngine();
 	void run(sf::RenderWindow&/*,std::shared_ptr<TCPCommunicator> c*/);
 	bool chooseStartingPlayer();
 	void managePackages();
+	void setTime(int);
+	void changeTurn();
 };
 

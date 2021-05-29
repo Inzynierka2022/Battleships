@@ -22,6 +22,26 @@ Package::Package(const std::string&s)
 	this->content = s;
 }
 
+void Package::set_type_hit(const int&i)
+{
+	this->content = "H" + std::to_string(i);
+}
+
+void Package::set_type_answer(const std::string&s)
+{
+	this->content = "A" + s;
+}
+
+void Package::set_type_start_game()
+{
+	this->content = "S";
+}
+
+void Package::set_type_starting_player(const std::string &s)
+{
+	this->content = "B" + s;
+}
+
 void Package::set_type_time(const int &i)
 {
 	this->content = "T"+std::to_string(i);
