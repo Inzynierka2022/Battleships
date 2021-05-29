@@ -118,6 +118,11 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 			try
 			{
 				joiner.connect();
+
+				std::shared_ptr<TCPCommunicator> communicator = std::make_shared<TCPCommunicator>(joiner.getSocket());
+				GameEngine game_engine(communicator, false);
+				game_engine.run(window);
+
 				return Button::ButtonState::Maintain;
 			}
 			catch (std::string e)
