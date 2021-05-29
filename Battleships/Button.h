@@ -1,20 +1,14 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <string>
-
-#include <iostream>
-#include <functional>
-#include "Runnable.h"
-class Button
+#include "Label.h"
+class Button : public Label
 {
 protected:
 	void calculateOrigin();
 	bool active;
 
-	std::function<void(std::string&)> functionality2 = [](std::string &text) {return; };
 
+	std::function<void(std::string&)> functionality2 = [](std::string &text) {return; };
+	bool canHover = true;
 public:
 	//Used to return button status after click. Exit and back buttons return ButtonState::terminate
 	enum ButtonState
@@ -25,7 +19,7 @@ public:
 	};
 
 	sf::RectangleShape rectangle;
-	sf::Text text;
+
 
 private:
 	std::shared_ptr<Runnable> runnable;
@@ -33,28 +27,30 @@ private:
 	
 
 public:
-	sf::Font font;
-	static std::string fontFile;
+
+
 	static sf::Vector2f rectangleSize;
 	static sf::Color rectangleOutlineColor;
 	static sf::Color rectangleColor;
-	static sf::Color textColor;
 	static int8_t rectangleOutlineThickness;
+	static std::string fontFile;
+	static sf::Color textColor;
 
 	Button();
 	Button(const sf::Vector2f& position, std::string content);
 	virtual void draw(sf::RenderWindow& window);
 	virtual void setPosition(const sf::Vector2f&);
 
-	sf::Vector2f getPosition() const;
-	void setString(const std::string &);
 
 	void invertColors();
+
 
 	sf::FloatRect getLocalBounds();
 	sf::FloatRect getGlobalBounds();
 	
 	void setSize(const sf::Vector2f&);
+	void setCanHover(bool);
+	
 
 	virtual std::function<ButtonState(sf::RenderWindow&, NetworkParameters)>& on_click();
 	virtual std::function<void(std::string&)>& on_update();
@@ -64,6 +60,8 @@ public:
 	virtual bool is_active() const;
 	virtual ButtonState click(sf::RenderWindow&, NetworkParameters);
 	virtual void deactivate();
+	sf::Vector2f getPosition() const;
+	
 
 };
 
