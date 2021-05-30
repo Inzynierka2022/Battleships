@@ -94,6 +94,13 @@ void Grid::changeField(const int&i, const bool&b)
 	else fields[i % 10][i / 10] = fieldType::Miss;
 }
 
+bool Grid::checkShip(const int& i)
+{
+	bool result = false;
+	//prawo
+	return result;
+}
+
 void Grid::drawMarkers(sf::RenderWindow& window)
 {
 	for (int x = 0; x < gridRows; x++) 

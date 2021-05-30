@@ -42,6 +42,7 @@ public:
 	int getTile();
 	bool checkTile(const int&);
 	void changeField(const int&,const bool&);
+	bool checkShip(const int&);
 	void drawMarkers(sf::RenderWindow& window);
 };
 

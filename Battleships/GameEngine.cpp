@@ -10,6 +10,8 @@ GameEngine::GameEngine(std::shared_ptr<TCPCommunicator> s, bool hosting)
 	buttons.push_back(readyButton);
 	Button* timer = new Button(sf::Vector2f(700, 600), std::to_string(this->time_to_start));
 	buttons.push_back(timer);
+	Button* myName = new Button(sf::Vector2f(270, 33), globalParameters.playerName);
+	buttons.push_back(myName);
 }
 
 GameEngine::~GameEngine()
@@ -49,6 +51,8 @@ void GameEngine::run(sf::RenderWindow& window)
 		Package package;
 		if(turn) package.set_type_starting_player("F");
 		else package.set_type_starting_player("T");
+		this->communicator->send(package);
+		package.set_type_player_name(globalParameters.playerName);
 		this->communicator->send(package);
 	}
 	timer.restart();
@@ -336,6 +340,7 @@ void GameEngine::managePackages()
 				package.set_type_answer("T"+std::to_string(tile_number));
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, true);
+
 			}
 			else
 			{
@@ -357,12 +362,23 @@ void GameEngine::managePackages()
 				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2));
 				//this->remainingTime += turn_time;
 				gridB.changeField(tile_number, true);
+				incHit();
+				if (isFinished())
+				{
+					this->gameState = 3;
+					buttons[0]->setString("winner");
+					Package package;
+					package.set_type_finish_game();
+					this->communicator->send(package);
+				}
+
 			}
 			else
 			{
 				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2));
 				gridB.changeField(tile_number, false);
 				changeTurn();
+				incMiss();
 			}
 			break;
 		case 'B':
@@ -380,6 +396,20 @@ void GameEngine::managePackages()
 			if (turn) buttons[0]->setString("your turn");
 			else buttons[0]->setString("wait");
 			break;
+		case 'N':
+			//Button* opponent_name = new Button(sf::Vector2f(750, 33),tmp.substr(1,tmp.size()-1));
+			buttons.push_back(new Button(sf::Vector2f(750, 33), tmp.substr(1, tmp.size() - 1)));
+			if (!isHost)
+			{
+				Package package;
+				package.set_type_player_name(globalParameters.playerName);
+				this->communicator->send(package);
+			}
+			break;
+		case 'F':
+			this->gameState = 3;
+			buttons[0]->setString("loser");
+			break;
 		}
 	}
 }
@@ -394,4 +424,19 @@ void GameEngine::changeTurn()
 	this->turn = !turn;
 	if (turn) buttons[0]->setString("your turn");
 	else buttons[0]->setString("wait");
+}
+
+void GameEngine::incHit()
+{
+	hit++;
+}
+
+void GameEngine::incMiss()
+{
+	miss++;
+}
+
+bool GameEngine::isFinished() const
+{
+	return hit == 20 ? true : false;
 }

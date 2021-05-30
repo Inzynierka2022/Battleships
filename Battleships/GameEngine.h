@@ -30,6 +30,8 @@ private:
 
 	sf::Clock timer;
 	int time_counter = 0;
+	int hit = 0;
+	int miss = 0;
 
 public:
 	const int time_to_start = 5; //60
@@ -41,5 +43,8 @@ public:
 	void managePackages();
 	void setTime(int);
 	void changeTurn();
+	void incHit();
+	void incMiss();
+	bool isFinished() const;
 };
 

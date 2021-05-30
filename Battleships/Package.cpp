@@ -22,6 +22,16 @@ Package::Package(const std::string&s)
 	this->content = s;
 }
 
+void Package::set_type_finish_game()
+{
+	this->content = "F";
+}
+
+void Package::set_type_player_name(const std::string& s)
+{
+	this->content = "N" + s;
+}
+
 void Package::set_type_hit(const int&i)
 {
 	this->content = "H" + std::to_string(i);

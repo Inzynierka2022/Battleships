@@ -10,7 +10,7 @@
 
 struct NetworkParameters
 {
-    std::string playerName;
+    std::string playerName = "user";
     sf::IpAddress remoteIP = sf::IpAddress::getLocalAddress();
     unsigned short remotePort = 8888;
     unsigned short localPort = 8888;
