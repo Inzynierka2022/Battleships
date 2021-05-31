@@ -74,7 +74,11 @@ void Package::set_type_request_pin()
 
 void Package::set_type_send_pin(std::array<char, 4> arr)
 {
-	this->content = "PIN;" + arr[0] + arr[1] + arr[2] + arr[3];
+	this->content = "PIN;";
+	this->content.push_back(arr[0]);
+	this->content.push_back(arr[1]);
+	this->content.push_back(arr[2]);
+	this->content.push_back(arr[3]);
 }
 
 void Package::set_type_validate_pin()

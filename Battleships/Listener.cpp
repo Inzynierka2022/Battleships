@@ -40,26 +40,18 @@ bool Listener::validatePin()
 		if (this->remoteSocket->receive(packet) == sf::Socket::Done)
 		{
 			Package remotePin(packet);
+
 			std::cout << "received: " << remotePin.get_content() << std::endl;
-			std::stringstream ssin(remotePin.get_content());
+			remotePin.get_content();
 
-			unsigned short i = 0;
-			std::string arr[2];
+			std::string localPin = "PIN;";
+			localPin.push_back(globalParameters.pin[0]);
+			localPin.push_back(globalParameters.pin[1]);
+			localPin.push_back(globalParameters.pin[2]);
+			localPin.push_back(globalParameters.pin[3]);
 
-			while (ssin.good() && i < 2)
-			{
-				ssin >> arr[i];
-				i++;
-			}
-
-			for (unsigned int i = 0; i < 4; i++)
-			{
-				std::cout << globalParameters.pin[i] << " <> " << arr[1][i] << std::endl;
-				if (globalParameters.pin[i] != arr[1][i])
-				{
-					return false;
-				}
-			}
+			std::cout << remotePin.get_content() << " <> " << localPin << std::endl;
+			return remotePin.get_content() == localPin;
 
 			package.set_type_validate_pin();
 			packet = package.asPacket();

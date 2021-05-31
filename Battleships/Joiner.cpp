@@ -49,6 +49,8 @@ bool Joiner::validatePin()
             else if (package.get_content() == "PIN_REQUEST")
             {
                 package.set_type_send_pin(globalParameters.pin);
+                std::cout << "sending " << globalParameters.pin[0] << globalParameters.pin[1] << globalParameters.pin[2] << globalParameters.pin[3] << std::endl;
+
                 packet = package.asPacket();
                 this->socket->send(packet);
             }
