@@ -94,7 +94,7 @@ void Button::setSize(const sf::Vector2f &s)
 
 void Button::hover()
 {
-	this->invertColors();
+	if(this->canHover)this->invertColors();
 }
 
 Button::ButtonState Button::click(sf::RenderWindow& window, NetworkParameters parameters)

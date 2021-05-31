@@ -6,7 +6,7 @@ GameEngine::GameEngine(std::shared_ptr<TCPCommunicator> s, bool hosting)
 	isHost = hosting;
 	communicator = s;
 	gameState = 0;
-	Button* readyButton = new Button(sf::Vector2f(700,700),"not ready");
+	Button* readyButton = new Button(sf::Vector2f(700, 700), "not ready");
 	buttons.push_back(readyButton);
 	Button* timer = new Button(sf::Vector2f(700, 600), std::to_string(this->time_to_start));
 	buttons.push_back(timer);
@@ -50,7 +50,7 @@ void GameEngine::run(sf::RenderWindow& window)
 		}*/
 		writeToFile("name1", "name2", "3211349", "scoreboard.txt");
 		Package package;
-		if(turn) package.set_type_starting_player("F");
+		if (turn) package.set_type_starting_player("F");
 		else package.set_type_starting_player("T");
 		this->communicator->send(package);
 		package.set_type_player_name(globalParameters.playerName);
@@ -71,7 +71,7 @@ void GameEngine::run(sf::RenderWindow& window)
 				window.close();
 			else if (event.type == sf::Event::MouseButtonPressed)
 			{
-				if (event.mouseButton.button == sf::Mouse::Button::Left) 
+				if (event.mouseButton.button == sf::Mouse::Button::Left)
 				{
 					if (this->gameState == 0)
 					{
@@ -90,7 +90,7 @@ void GameEngine::run(sf::RenderWindow& window)
 						{
 							lpm = true;
 							int bomb_tile = gridB.getTile();
-							std::cout << "klik\t"<<bomb_tile<<'\n';
+							std::cout << "klik\t" << bomb_tile << '\n';
 							if (bomb_tile >= 0)
 							{
 								//leci poprawny strza³
@@ -117,11 +117,11 @@ void GameEngine::run(sf::RenderWindow& window)
 						}
 					}
 				}
-				
+
 
 				if (event.mouseButton.button == sf::Mouse::Button::Right)
 				{
-					if (this->gameState==0)
+					if (this->gameState == 0)
 					{
 						if (dragShip) ships.getDraggedShip().rotate();
 					}
@@ -133,8 +133,8 @@ void GameEngine::run(sf::RenderWindow& window)
 					ships.randomize(this->gridA);
 			}
 		}
-		
-		if(isHost)
+
+		if (isHost)
 		{
 			if (gameState == 0 || gameState == 1)
 			{
@@ -201,12 +201,12 @@ void GameEngine::run(sf::RenderWindow& window)
 			}
 			else if (gameState == 3)
 			{
-				
+
 				//koniec gry
 			}
 
 		}
-		
+
 		/*if (gameState < 2 && isHost)
 		{
 			if (timer.getElapsedTime().asSeconds() >= 1.f)
@@ -228,7 +228,7 @@ void GameEngine::run(sf::RenderWindow& window)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
-			if (!buttonPressed && gameState<2)
+			if (!buttonPressed && gameState < 2)
 			{
 				buttonPressed = true;
 				ships.resetShips();
@@ -239,7 +239,7 @@ void GameEngine::run(sf::RenderWindow& window)
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
-			if (!buttonPressed && gameState<2 && ships.checkIfAllPlaced())
+			if (!buttonPressed && gameState < 2 && ships.checkIfAllPlaced())
 			{
 				buttonPressed = true;
 				gameState = (gameState + 1) % 2;
@@ -264,14 +264,14 @@ void GameEngine::run(sf::RenderWindow& window)
 		{
 			buttonPressed = false;
 		}
-		if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			lpm = false;
 		}
 
 		window.clear();
 
-		
+
 
 		if (dragShip)
 		{
@@ -329,7 +329,7 @@ void GameEngine::managePackages()
 			if (this->remainingTime == turn_time && gameState == 2)
 			{
 				//turn = !turn;
-				
+
 			}
 			std::cout << this->turn << '\n';
 			break;
@@ -339,7 +339,7 @@ void GameEngine::managePackages()
 			if (gridA.checkTile(tile_number))
 			{
 				Package package;
-				package.set_type_answer("T"+std::to_string(tile_number));
+				package.set_type_answer("T" + std::to_string(tile_number));
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, true);
 				std::cout << "Destroyed?: " << this->gridA.checkIfShipDestroyed(tile_number, -1) << std::endl;
@@ -348,12 +348,12 @@ void GameEngine::managePackages()
 					this->gridA.destroyShip(tile_number, -1);
 					package.set_type_answer("D" + std::to_string(tile_number));
 					this->communicator->send(package);
-				}					
+				}
 			}
 			else
 			{
 				Package package;
-				package.set_type_answer("F"+ std::to_string(tile_number));
+				package.set_type_answer("F" + std::to_string(tile_number));
 				changeTurn();
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, false);
@@ -383,7 +383,7 @@ void GameEngine::managePackages()
 			}
 			else if (tmp[1] == 'D')
 			{
-				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2)); 
+				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2));
 				this->gridB.destroyShip(tile_number, -1);
 			}
 			else
@@ -450,67 +450,43 @@ void GameEngine::incMiss()
 }
 
 
-void GameEngine::writeToFile(std::string name1, std::string name2, std::string score, const std::string&name)
+void GameEngine::writeToFile(std::string name1, std::string name2, std::string score, const std::string& name)
 {
 	std::string txt;
 	std::vector<std::string> vectorTxt;
 	std::fstream MyReadFile;
-	
 
-	MyReadFile.open(name, std::ios::in | std::ios::out);
 
-	if (MyReadFile.is_open())
+	MyReadFile.open(name.c_str(), std::ios::out | std::ios::in);
+
+	while (!MyReadFile.eof())
 	{
-		std::cout << "dsoisfugt" << std::endl;
+		MyReadFile >> txt;
+		vectorTxt.push_back((std::string)txt);
+		std::cout << "dodaje: " << txt << std::endl;
 	}
-	if (!MyReadFile)
-	{
-		std::cout << "No such file";
-	}
-	else
-	{
-		while (!MyReadFile.eof())
-		{
-			MyReadFile >> txt;
-			vectorTxt.push_back((std::string)txt);
-			std::cout << "dodaje: " << txt << std::endl;
-		}
-	}
-	//MyReadFile.close();
-	//MyWriteFile.open(name, std::ios::out);
-	for (int i = 4; i < vectorTxt.size(); i++) 
+	MyReadFile.close();
+	MyReadFile.open(name.c_str(), std::ios::out | std::ofstream::trunc);
+
+	for (int i = 4; i < vectorTxt.size(); i++)
 	{
 		if ((i % 4 == 3) && (std::stoi(score) > (std::stoi(vectorTxt[i]))))
 		{
-			vectorTxt[i-2] = name1;
-			vectorTxt[i-1] = name2;
+			vectorTxt[i - 2] = name1;
+			vectorTxt[i - 1] = name2;
 			vectorTxt[i] = score;
 			break;
 		}
 	}
-	for (int i = 0; i < vectorTxt.size(); i++)
-	{
-		if (i % 4 == 0)
-		{
-			std::cout << std::endl;
-		}
-		std::cout <<vectorTxt[i]<<" "<< std::endl;
-	}
-	std::cout << "dotarlo" << std::endl;
 
-//	MyReadFile.clear();
-
-	MyReadFile << "sdlfrpjpreds;ew";
-	for (int i = 0; i < vectorTxt.size(); i++)
+	for (int i = 0; i < vectorTxt.size() - 1; i++)
 	{
 		//MyReadFile.write((char*)&vectorTxt[i], sizeof(std::string));
 		//MyReadFile.write(vectorTxt[i].c_str(), sizeof(std::string));
-		MyReadFile << vectorTxt[i];
-		std::cout << "iii: " << i << std::endl;
+		i % 4 == 3 ? MyReadFile << vectorTxt[i] << "\n" : MyReadFile << vectorTxt[i] << "\t";
 	}
-	std::cout << "dotarlo2" << std::endl;
 	MyReadFile.close();
-	
+
 }
 
 bool GameEngine::isFinished() const
