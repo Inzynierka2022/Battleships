@@ -15,7 +15,7 @@ struct NetworkParameters
     unsigned short remotePort = 8888;
     unsigned short localPort = 8888;
     std::array<char, 4> pin = { '0', '0', '0', '0' };
-    std::array<char, 4> tmpPin = { '0', '0', '0', '0' };
+    //std::array<char, 4> tmpPin = { '0', '0', '0', '0' };
     std::string lastErrorCode = "";
 };
 

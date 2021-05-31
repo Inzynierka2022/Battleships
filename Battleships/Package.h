@@ -2,6 +2,7 @@
 #include <SFML/Network.hpp>
 #include <string>
 #include <array>
+#include <iostream>
 
 class Package
 {
