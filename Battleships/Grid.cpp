@@ -1,4 +1,4 @@
-#include "Grid.h"
+﻿#include "Grid.h"
 #include <iostream>
 
 void Grid::draw_on_position(uint8_t, sf::Vector2f)
@@ -99,6 +99,56 @@ bool Grid::checkShip(const int& i)
 	bool result = false;
 	//prawo
 	return result;
+}
+
+bool Grid::checkIfShipDestroyed(const int& tile, const int& tileThatCalledIt) //nie miałem lepszego pomysłu na nazwę tej zmiennej xd
+{
+	if (tile < 0 || tile >= 100) return true;
+	int x = tile % 10, y = tile / 10;
+	if (fields[x][y] == fieldType::Ship) return false;
+	if (fields[x][y] == fieldType::Empty || fields[x][y] == fieldType::Miss) return true;
+
+	int tempX, tempY, tempTile;
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			tempX = x + i - 1;
+			tempY = y + j - 1;
+			if (tempX >= 0 && tempX < 10 && tempY >= 0 && tempY < 10)
+			{
+				tempTile = tempX + tempY * 10;
+				if (fields[tempX][tempY] == fieldType::Ship) return false;
+				if (fields[tempX][tempY] == fieldType::Hit && tempTile != tileThatCalledIt && tempTile != tile)
+					if(!checkIfShipDestroyed(tempTile, tile)) return false;
+			}
+		}
+	}
+	return true;
+}
+
+void Grid::destroyShip(const int& tile, const int& tileThatCalledIt )
+{
+	std::cout << "hello: " << tile << std::endl;
+	if (tile < 0 || tile >= 100) return;
+	int x = tile % 10, y = tile / 10;
+
+	int tempX, tempY, tempTile;
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			tempX = x + i - 1;
+			tempY = y + j - 1;
+			if (tempX >= 0 && tempX < 10 && tempY >= 0 && tempY < 10)
+			{
+				tempTile = tempX + tempY * 10;
+				if (fields[tempX][tempY] == fieldType::Empty) fields[tempX][tempY] = fieldType::Miss;
+				if (fields[tempX][tempY] == fieldType::Hit && tempTile != tileThatCalledIt && tempTile != tile)
+					destroyShip(tempTile, tile);
+			}
+		}
+	}
 }
 
 void Grid::drawMarkers(sf::RenderWindow& window)

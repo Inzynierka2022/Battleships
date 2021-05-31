@@ -340,7 +340,13 @@ void GameEngine::managePackages()
 				package.set_type_answer("T"+std::to_string(tile_number));
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, true);
-
+				std::cout << "Destroyed?: " << this->gridA.checkIfShipDestroyed(tile_number, -1) << std::endl;
+				if (this->gridA.checkIfShipDestroyed(tile_number, -1))
+				{
+					this->gridA.destroyShip(tile_number, -1);
+					package.set_type_answer("D" + std::to_string(tile_number));
+					this->communicator->send(package);
+				}					
 			}
 			else
 			{
@@ -372,6 +378,11 @@ void GameEngine::managePackages()
 					this->communicator->send(package);
 				}
 
+			}
+			else if (tmp[1] == 'D')
+			{
+				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2)); 
+				this->gridB.destroyShip(tile_number, -1);
 			}
 			else
 			{

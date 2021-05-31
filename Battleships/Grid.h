@@ -44,5 +44,7 @@ public:
 	void changeField(const int&,const bool&);
 	bool checkShip(const int&);
 	void drawMarkers(sf::RenderWindow& window);
+	bool checkIfShipDestroyed(const int&, const int&);
+	void destroyShip(const int&, const int&);
 };
 
