@@ -37,6 +37,11 @@ void Package::set_type_finish_game()
 	this->content = "F";
 }
 
+void Package::set_type_disconnect_game()
+{
+	this->content = "D";
+}
+
 void Package::set_type_player_name(const std::string& s)
 {
 	this->content = "N" + s;

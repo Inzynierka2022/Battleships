@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Network.hpp>
+#include <SFML/System.hpp>
 #include "Package.h"
 #include <vector>
 #include <memory>
@@ -17,6 +18,7 @@ private:
 
 	std::shared_ptr<sf::TcpSocket> socket;
 
+	sf::Clock timeFromLastMessage;
 public:
 	TCPCommunicator(std::shared_ptr<sf::TcpSocket>);
 	void send(std::shared_ptr<std::vector<Package>>);

@@ -420,11 +420,21 @@ void GameEngine::managePackages()
 			this->gameState = 3;
 			buttons[0]->setString("loser");
 			break;
+		case 'D':
+			//koniec gry roz³¹czone
+			this->gameState = 3;
+			buttons[0]->setString("Disconnected");
+			break;
 		case 'C':
 			changeTurn();
 			break;
 		case 'R':
 			isOpponentReady = !isOpponentReady;
+			break;
+		case 'P':
+			Package p;
+			p.set_type_pong();
+			this->communicator->send(p);
 			break;
 		}
 	}

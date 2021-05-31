@@ -20,6 +20,7 @@ public:
 	void set_type_ready();
 	void set_type_change_turn();
 	void set_type_finish_game();
+	void set_type_disconnect_game();
 	void set_type_player_name(const std::string&);
 	void set_type_hit(const int&);
 	void set_type_answer(const std::string&);
