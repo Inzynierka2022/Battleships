@@ -242,6 +242,7 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75, windowSize.y - Button::rectangleSize.y), "back"));
 
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75, 200), r[0]));
+		
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75 - 1250, 200), r[1]));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75 - 1250, 200), r[2]));
 		this->elements.push_back(std::make_shared<Button>(sf::Vector2f(Button::rectangleSize.x / 1.75 - 1250, 200), r[3]));

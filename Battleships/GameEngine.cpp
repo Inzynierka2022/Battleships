@@ -6,7 +6,7 @@ GameEngine::GameEngine(std::shared_ptr<TCPCommunicator> s, bool hosting)
 	isHost = hosting;
 	communicator = s;
 	gameState = 0;
-	Button* readyButton = new Button(sf::Vector2f(700,700),"not ready");
+	Button* readyButton = new Button(sf::Vector2f(700, 700), "not ready");
 	buttons.push_back(readyButton);
 	Button* timer = new Button(sf::Vector2f(700, 600), std::to_string(this->time_to_start));
 	buttons.push_back(timer);
@@ -49,8 +49,9 @@ void GameEngine::run(sf::RenderWindow& window)
 			Package package("false");
 			this->communicator->send(package);
 		}*/
+		writeToFile("name1", "name2", "3211349", "scoreboard.txt");
 		Package package;
-		if(turn) package.set_type_starting_player("F");
+		if (turn) package.set_type_starting_player("F");
 		else package.set_type_starting_player("T");
 		this->communicator->send(package);
 		package.set_type_player_name(globalParameters.playerName);
@@ -71,7 +72,7 @@ void GameEngine::run(sf::RenderWindow& window)
 				window.close();
 			else if (event.type == sf::Event::MouseButtonPressed)
 			{
-				if (event.mouseButton.button == sf::Mouse::Button::Left) 
+				if (event.mouseButton.button == sf::Mouse::Button::Left)
 				{
 					if (this->gameState == 0)
 					{
@@ -90,10 +91,10 @@ void GameEngine::run(sf::RenderWindow& window)
 						{
 							lpm = true;
 							int bomb_tile = gridB.getTile();
-							std::cout << "klik\t"<<bomb_tile<<'\n';
+							std::cout << "klik\t" << bomb_tile << '\n';
 							if (bomb_tile >= 0)
 							{
-								//leci poprawny strza³
+								//leci poprawny strzaï¿½
 								//reset tury
 								Package package;
 								package.set_type_hit(bomb_tile);
@@ -117,11 +118,11 @@ void GameEngine::run(sf::RenderWindow& window)
 						}
 					}
 				}
-				
+
 
 				if (event.mouseButton.button == sf::Mouse::Button::Right)
 				{
-					if (this->gameState==0)
+					if (this->gameState == 0)
 					{
 						if (dragShip) ships.getDraggedShip().rotate();
 					}
@@ -133,8 +134,8 @@ void GameEngine::run(sf::RenderWindow& window)
 					ships.randomize(this->gridA);
 			}
 		}
-		
-		if(isHost)
+
+		if (isHost)
 		{
 			if (gameState == 0 || gameState == 1)
 			{
@@ -151,14 +152,14 @@ void GameEngine::run(sf::RenderWindow& window)
 					}
 					else
 					{
-						//tutaj automatyczne losowanie pozycji statków
+						//tutaj automatyczne losowanie pozycji statkï¿½w
 						if (!ships.checkIfAllPlaced())
 						{
 							this->ships.randomize(gridA);
 						}
 						package.set_type_start_game();
 						communicator->send(package);
-						//je¿eli niewylosowane
+						//jeï¿½eli niewylosowane
 						//
 						package.set_type_time(turn_time);
 						this->setTime(turn_time);
@@ -187,7 +188,7 @@ void GameEngine::run(sf::RenderWindow& window)
 					else
 					{
 						//tutaj automatyczny ruch
-						//je¿eli nie wybrany
+						//jeï¿½eli nie wybrany
 						//
 						package.set_type_change_turn();
 						this->communicator->send(package);
@@ -204,6 +205,7 @@ void GameEngine::run(sf::RenderWindow& window)
 			}
 			else if (gameState == 3)
 			{
+
 				//koniec gry
 			}
 
@@ -211,7 +213,7 @@ void GameEngine::run(sf::RenderWindow& window)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
-			if (!buttonPressed && gameState<2)
+			if (!buttonPressed && gameState < 2)
 			{
 				buttonPressed = true;
 				ships.resetShips();
@@ -221,14 +223,14 @@ void GameEngine::run(sf::RenderWindow& window)
 			}
 			else if (!buttonPressed && gameState == 3)
 			{
-				//wróc do menu
+				//wrï¿½c do menu
 				buttonPressed = true;
 				break;
 			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
-			if (!buttonPressed && gameState<2 && ships.checkIfAllPlaced())
+			if (!buttonPressed && gameState < 2 && ships.checkIfAllPlaced())
 			{
 				buttonPressed = true;
 				gameState = (gameState + 1) % 2;
@@ -256,14 +258,14 @@ void GameEngine::run(sf::RenderWindow& window)
 		{
 			buttonPressed = false;
 		}
-		if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			lpm = false;
 		}
 
 		window.clear();
 
-		
+
 
 		if (dragShip)
 		{
@@ -327,7 +329,7 @@ void GameEngine::managePackages()
 			if (this->remainingTime == turn_time && gameState == 2)
 			{
 				//turn = !turn;
-				
+
 			}
 			break;
 		case 'H':
@@ -336,7 +338,7 @@ void GameEngine::managePackages()
 			if (gridA.checkTile(tile_number))
 			{
 				Package package;
-				package.set_type_answer("T"+std::to_string(tile_number));
+				package.set_type_answer("T" + std::to_string(tile_number));
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, true);
 				if (this->gridA.checkIfShipDestroyed(tile_number, -1))
@@ -344,12 +346,12 @@ void GameEngine::managePackages()
 					this->gridA.destroyShip(tile_number, -1);
 					package.set_type_answer("D" + std::to_string(tile_number));
 					this->communicator->send(package);
-				}					
+				}
 			}
 			else
 			{
 				Package package;
-				package.set_type_answer("F"+ std::to_string(tile_number));
+				package.set_type_answer("F" + std::to_string(tile_number));
 				changeTurn();
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, false);
@@ -379,7 +381,7 @@ void GameEngine::managePackages()
 			}
 			else if (tmp[1] == 'D')
 			{
-				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2)); 
+				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2));
 				this->gridB.destroyShip(tile_number, -1);
 
 				int type;
@@ -397,7 +399,7 @@ void GameEngine::managePackages()
 			}
 			break;
 		case 'B':
-			//wylosowany zaczynaj¹cy
+			//wylosowany zaczynajï¿½cy
 			if (tmp[1] == 'F') turn = false;
 			else turn = true;
 			break;
@@ -412,7 +414,7 @@ void GameEngine::managePackages()
 			else buttons[0]->setString("wait");
 			break;
 		case 'N':
-			//odebranie nazwy gracza i wys³anie swojej
+			//odebranie nazwy gracza i wysï¿½anie swojej
 			//Button* opponent_name = new Button(sf::Vector2f(750, 33),tmp.substr(1,tmp.size()-1));
 			buttons.push_back(new Button(sf::Vector2f(750, 33), tmp.substr(1, tmp.size() - 1)));
 			if (!isHost)
@@ -423,12 +425,12 @@ void GameEngine::managePackages()
 			}
 			break;
 		case 'F':
-			//koniec gry przegra³eœ
+			//koniec gry przegraï¿½eï¿½
 			this->gameState = 3;
 			buttons[0]->setString("loser");
 			break;
 		case 'D':
-			//koniec gry roz³¹czone
+			//koniec gry rozï¿½ï¿½czone
 			this->gameState = 3;
 			buttons[0]->setString("Disconnected");
 			break;
@@ -467,6 +469,46 @@ void GameEngine::incHit()
 void GameEngine::incMiss()
 {
 	miss++;
+}
+
+
+void GameEngine::writeToFile(std::string name1, std::string name2, std::string score, const std::string& name)
+{
+	std::string txt;
+	std::vector<std::string> vectorTxt;
+	std::fstream MyReadFile;
+
+
+	MyReadFile.open(name.c_str(), std::ios::out | std::ios::in);
+
+	while (!MyReadFile.eof())
+	{
+		MyReadFile >> txt;
+		vectorTxt.push_back((std::string)txt);
+		std::cout << "dodaje: " << txt << std::endl;
+	}
+	MyReadFile.close();
+	MyReadFile.open(name.c_str(), std::ios::out | std::ofstream::trunc);
+
+	for (int i = 4; i < vectorTxt.size(); i++)
+	{
+		if ((i % 4 == 3) && (std::stoi(score) > (std::stoi(vectorTxt[i]))))
+		{
+			vectorTxt[i - 2] = name1;
+			vectorTxt[i - 1] = name2;
+			vectorTxt[i] = score;
+			break;
+		}
+	}
+
+	for (int i = 0; i < vectorTxt.size() - 1; i++)
+	{
+		//MyReadFile.write((char*)&vectorTxt[i], sizeof(std::string));
+		//MyReadFile.write(vectorTxt[i].c_str(), sizeof(std::string));
+		i % 4 == 3 ? MyReadFile << vectorTxt[i] << "\n" : MyReadFile << vectorTxt[i] << "\t";
+	}
+	MyReadFile.close();
+
 }
 
 bool GameEngine::isFinished() const

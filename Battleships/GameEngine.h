@@ -6,6 +6,8 @@
 #include "Button.h"
 #include <memory>
 #include <thread>
+#include <iostream>
+#include <fstream>
 //#include <ctime>
 
 class GameEngine
@@ -47,6 +49,8 @@ public:
 	void changeTurn();
 	void incHit();
 	void incMiss();
+	void writeToFile(std::string name1, std::string name2, std::string score, const std::string&name);
 	bool isFinished() const;
+
 };
 
