@@ -22,6 +22,11 @@ Package::Package(const std::string&s)
 	this->content = s;
 }
 
+void Package::set_type_change_turn()
+{
+	this->content = "C";
+}
+
 void Package::set_type_finish_game()
 {
 	this->content = "F";

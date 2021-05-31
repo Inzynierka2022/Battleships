@@ -34,8 +34,8 @@ private:
 	int miss = 0;
 
 public:
-	const int time_to_start = 5; //60
-	const int turn_time = 5; //30
+	const int time_to_start = 10; //60
+	const int turn_time = 10; //30
 	GameEngine(std::shared_ptr<TCPCommunicator>,bool);
 	~GameEngine();
 	void run(sf::RenderWindow&/*,std::shared_ptr<TCPCommunicator> c*/);
