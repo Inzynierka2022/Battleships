@@ -75,7 +75,7 @@ void ListenerMenu::run(sf::RenderWindow& window)
 		this->draw(window);
 		window.display();
 	}
-
+	std::cout << "dupa" << '\n';
 	listener.stopListening();
 	std::cout << "Waiting for listener to stop" << std::endl;
 	listenerThread.join();

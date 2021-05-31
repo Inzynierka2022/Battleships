@@ -39,7 +39,7 @@ std::shared_ptr<std::vector<Package>> TCPCommunicator::receive()
 
 void TCPCommunicator::stop_listening()
 {
-	this->connected.store(true);
+	this->connected.store(false);
 }
 
 void TCPCommunicator::run()

@@ -222,6 +222,7 @@ void GameEngine::run(sf::RenderWindow& window)
 			{
 				//wróc do menu
 				buttonPressed = true;
+				break;
 			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
@@ -289,6 +290,7 @@ void GameEngine::run(sf::RenderWindow& window)
 
 		window.display();
 	}
+	this->communicator->stop_listening();
 	communicator_thread.join();
 }
 
@@ -350,11 +352,11 @@ void GameEngine::managePackages()
 				changeTurn();
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, false);
-				time_counter = 0;
-				timer.restart();
-				this->remainingTime = turn_time;
 				this->buttons[1]->setString(std::to_string(remainingTime));
 			}
+			time_counter = 0;
+			timer.restart();
+			this->remainingTime = turn_time;
 			break;
 		case 'A':
 			//odpowiedz na zestrzelenie pola
