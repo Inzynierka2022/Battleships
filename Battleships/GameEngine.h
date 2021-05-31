@@ -17,6 +17,7 @@ private:
 	int gameState;	//0 not ready //1 ready //2 game running
 	bool turn = false;
 	bool isHost = false;
+	bool isOpponentReady = false;
 	int remainingTime = 0;
 	/*
 	0 - placing ships

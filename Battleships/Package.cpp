@@ -22,6 +22,11 @@ Package::Package(const std::string&s)
 	this->content = s;
 }
 
+void Package::set_type_ready()
+{
+	this->content = "R";
+}
+
 void Package::set_type_change_turn()
 {
 	this->content = "C";

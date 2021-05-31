@@ -143,7 +143,7 @@ void GameEngine::run(sf::RenderWindow& window)
 					timer.restart();
 					this->remainingTime = this->time_to_start - time_counter;
 					Package package;
-					if (remainingTime >= 0)
+					if (remainingTime >= 0 && !(gameState == 1 && isOpponentReady))
 					{
 						package.set_type_time(this->remainingTime);
 						this->setTime(this->remainingTime);
@@ -218,6 +218,11 @@ void GameEngine::run(sf::RenderWindow& window)
 				buttons[0]->setString("not ready");
 				std::cout << "reset\n";
 			}
+			else if (!buttonPressed && gameState == 3)
+			{
+				//wróc do menu
+				buttonPressed = true;
+			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
@@ -228,6 +233,9 @@ void GameEngine::run(sf::RenderWindow& window)
 				std::cout << gameState << '\n';
 				if (gameState) buttons[0]->setString("ready");
 				else buttons[0]->setString("not ready");
+				Package package;
+				package.set_type_ready();
+				this->communicator->send(package);
 			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
@@ -412,6 +420,9 @@ void GameEngine::managePackages()
 			break;
 		case 'C':
 			changeTurn();
+			break;
+		case 'R':
+			isOpponentReady = !isOpponentReady;
 			break;
 		}
 	}
