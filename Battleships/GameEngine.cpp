@@ -48,6 +48,7 @@ void GameEngine::run(sf::RenderWindow& window)
 			Package package("false");
 			this->communicator->send(package);
 		}*/
+		writeToFile("name1", "name2", "3211349", "scoreboard.txt");
 		Package package;
 		if(turn) package.set_type_starting_player("F");
 		else package.set_type_starting_player("T");
@@ -200,6 +201,7 @@ void GameEngine::run(sf::RenderWindow& window)
 			}
 			else if (gameState == 3)
 			{
+				
 				//koniec gry
 			}
 
@@ -445,6 +447,70 @@ void GameEngine::incHit()
 void GameEngine::incMiss()
 {
 	miss++;
+}
+
+
+void GameEngine::writeToFile(std::string name1, std::string name2, std::string score, const std::string&name)
+{
+	std::string txt;
+	std::vector<std::string> vectorTxt;
+	std::fstream MyReadFile;
+	
+
+	MyReadFile.open(name, std::ios::in | std::ios::out);
+
+	if (MyReadFile.is_open())
+	{
+		std::cout << "dsoisfugt" << std::endl;
+	}
+	if (!MyReadFile)
+	{
+		std::cout << "No such file";
+	}
+	else
+	{
+		while (!MyReadFile.eof())
+		{
+			MyReadFile >> txt;
+			vectorTxt.push_back((std::string)txt);
+			std::cout << "dodaje: " << txt << std::endl;
+		}
+	}
+	//MyReadFile.close();
+	//MyWriteFile.open(name, std::ios::out);
+	for (int i = 4; i < vectorTxt.size(); i++) 
+	{
+		if ((i % 4 == 3) && (std::stoi(score) > (std::stoi(vectorTxt[i]))))
+		{
+			vectorTxt[i-2] = name1;
+			vectorTxt[i-1] = name2;
+			vectorTxt[i] = score;
+			break;
+		}
+	}
+	for (int i = 0; i < vectorTxt.size(); i++)
+	{
+		if (i % 4 == 0)
+		{
+			std::cout << std::endl;
+		}
+		std::cout <<vectorTxt[i]<<" "<< std::endl;
+	}
+	std::cout << "dotarlo" << std::endl;
+
+//	MyReadFile.clear();
+
+	MyReadFile << "sdlfrpjpreds;ew";
+	for (int i = 0; i < vectorTxt.size(); i++)
+	{
+		//MyReadFile.write((char*)&vectorTxt[i], sizeof(std::string));
+		//MyReadFile.write(vectorTxt[i].c_str(), sizeof(std::string));
+		MyReadFile << vectorTxt[i];
+		std::cout << "iii: " << i << std::endl;
+	}
+	std::cout << "dotarlo2" << std::endl;
+	MyReadFile.close();
+	
 }
 
 bool GameEngine::isFinished() const
