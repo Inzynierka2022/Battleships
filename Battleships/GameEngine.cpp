@@ -25,6 +25,7 @@ GameEngine::~GameEngine()
 
 void GameEngine::run(sf::RenderWindow& window)
 {
+	srand(time(NULL));
 	bool dragShip = false;
 	bool buttonPressed = false;
 	//int time_counter = 0;
@@ -287,6 +288,7 @@ void GameEngine::run(sf::RenderWindow& window)
 		gridB.draw(window);
 
 		ships.draw(window);
+		enemyShips.draw(window);
 
 		gridA.drawMarkers(window);
 		gridB.drawMarkers(window);
@@ -340,7 +342,6 @@ void GameEngine::managePackages()
 				package.set_type_answer("T"+std::to_string(tile_number));
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, true);
-				std::cout << "Destroyed?: " << this->gridA.checkIfShipDestroyed(tile_number, -1) << std::endl;
 				if (this->gridA.checkIfShipDestroyed(tile_number, -1))
 				{
 					this->gridA.destroyShip(tile_number, -1);
@@ -383,6 +384,12 @@ void GameEngine::managePackages()
 			{
 				tile_number = std::stoi(tmp.substr(2, tmp.size() - 2)); 
 				this->gridB.destroyShip(tile_number, -1);
+
+				int type;
+				sf::Vector2i position;
+				bool orientation;
+				this->gridB.getDestroyedShipInfo(tile_number, type, position, orientation);
+				this->enemyShips.showShip(type,position, orientation);
 			}
 			else
 			{

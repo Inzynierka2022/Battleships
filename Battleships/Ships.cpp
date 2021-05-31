@@ -1,18 +1,34 @@
-#include "Ships.h"
+﻿#include "Ships.h"
 #include <iostream>
 
-Ships::Ships()
+Ships::Ships(bool visible)
 {
-	ships[0] = Ship(4, sf::Vector2f(50, 550));
-	ships[1] = Ship(3, sf::Vector2f(50, 600));
-	ships[2] = Ship(3, sf::Vector2f(180, 600));
-	ships[3] = Ship(2, sf::Vector2f(50, 650));
-	ships[4] = Ship(2, sf::Vector2f(140, 650));
-	ships[5] = Ship(2, sf::Vector2f(230, 650));
-	ships[6] = Ship(1, sf::Vector2f(50, 700));
-	ships[7] = Ship(1, sf::Vector2f(100, 700));
-	ships[8] = Ship(1, sf::Vector2f(150, 700));
-	ships[9] = Ship(1, sf::Vector2f(200, 700));	
+	if (visible)
+	{
+		ships[0] = Ship(4, sf::Vector2f(50, 550));
+		ships[1] = Ship(3, sf::Vector2f(50, 600));
+		ships[2] = Ship(3, sf::Vector2f(180, 600));
+		ships[3] = Ship(2, sf::Vector2f(50, 650));
+		ships[4] = Ship(2, sf::Vector2f(140, 650));
+		ships[5] = Ship(2, sf::Vector2f(230, 650));
+		ships[6] = Ship(1, sf::Vector2f(50, 700));
+		ships[7] = Ship(1, sf::Vector2f(100, 700));
+		ships[8] = Ship(1, sf::Vector2f(150, 700));
+		ships[9] = Ship(1, sf::Vector2f(200, 700));
+	}
+	else
+	{
+		ships[0] = Ship(4, sf::Vector2f(-1000, -1000), visible);
+		ships[1] = Ship(3, sf::Vector2f(-1000, -1000), visible);
+		ships[2] = Ship(3, sf::Vector2f(-1000, -1000), visible);
+		ships[3] = Ship(2, sf::Vector2f(-1000, -1000), visible);
+		ships[4] = Ship(2, sf::Vector2f(-1000, -1000), visible);
+		ships[5] = Ship(2, sf::Vector2f(-1000, -1000), visible);
+		ships[6] = Ship(1, sf::Vector2f(-1000, -1000), visible);
+		ships[7] = Ship(1, sf::Vector2f(-1000, -1000), visible);
+		ships[8] = Ship(1, sf::Vector2f(-1000, -1000), visible);
+		ships[9] = Ship(1, sf::Vector2f(-1000, -1000), visible);
+	}
 }
 
 void Ships::draw(sf::RenderWindow& window)
@@ -133,5 +149,21 @@ void Ships::resetShips()
 			ships[i].setOrientation(true);
 			//ships[i].rotate();
 		}
+	}
+}
+
+void Ships::showShip(int type, sf::Vector2i position, bool orientation)
+{
+	bool x = false;
+	for (int i=0; i<10; i++)
+	{
+		if (!ships[i].isVisible() && ships[i].getType() == type)
+		{
+			ships[i].setOrientation(orientation);
+			ships[i].setPosition(position);
+			ships[i].setVisibility(true);
+			break;
+		}
+		//std::cout << (int)ships[i].getType() << " "<<ships[i].getPosition().x << " " << ships[i].getPosition().y << std::endl;
 	}
 }

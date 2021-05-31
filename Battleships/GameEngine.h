@@ -13,7 +13,8 @@ class GameEngine
 private:
 	Grid gridA = Grid(sf::Vector2i(80, 100));
     Grid gridB = Grid(sf::Vector2i(560, 100));
-	Ships ships = Ships();
+	Ships ships = Ships(true);
+	Ships enemyShips = Ships(false);
 	int gameState;	//0 not ready //1 ready //2 game running
 	bool turn = false;
 	bool isHost = false;

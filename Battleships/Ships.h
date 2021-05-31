@@ -15,7 +15,7 @@ private:
 	bool draggedShipOrientation = true;
 	sf::Vector2f draggedShipStartingPosition;
 public:
-	Ships();
+	Ships(bool visible);
 	void draw(sf::RenderWindow& window);
 	Ship& getDraggedShip();
 	bool checkIfPlaced();
@@ -24,4 +24,5 @@ public:
 	bool checkIfAllPlaced() const;
 	void randomize(Grid& g);
 	void resetShips();
+	void showShip(int type, sf::Vector2i position, bool orientation);
 };

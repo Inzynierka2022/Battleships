@@ -15,9 +15,22 @@ Ship::Ship(uint8_t type, sf::Vector2f position)
 	rectangle.setTextureRect(sf::IntRect(0, 40 * (type - 1), 40 * type, 40));
 }
 
+Ship::Ship(uint8_t type, sf::Vector2f position, bool visible)
+{
+	shipsTextures = new sf::Texture;
+	shipsTextures->loadFromFile("ships.png");
+	this->type = type;
+	rectangle.setSize(sf::Vector2f(type * 40, 40));
+	rectangle.setPosition(position);
+	rectangle.setTexture(shipsTextures);
+	rectangle.setTextureRect(sf::IntRect(0, 40 * (type - 1), 40 * type, 40));
+	this->visible = visible;
+}
+
 void Ship::draw(sf::RenderWindow& window)
 {
-	window.draw(rectangle);
+	if(this->visible)
+		window.draw(rectangle);
 }
 
 bool Ship::checkMousePosition(sf::Vector2i mousePosition)
@@ -80,4 +93,14 @@ void Ship::setPlaced(bool _placed)
 bool Ship::isPlaced()
 {
 	return placed;
+}
+
+bool Ship::isVisible()
+{
+	return visible;
+}
+
+void Ship::setVisibility(const bool& visible)
+{
+	this->visible = visible;
 }

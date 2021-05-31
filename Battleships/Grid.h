@@ -46,5 +46,9 @@ public:
 	void drawMarkers(sf::RenderWindow& window);
 	bool checkIfShipDestroyed(const int&, const int&);
 	void destroyShip(const int&, const int&);
+	void getDestroyedShipInfo(int tile, int& type, sf::Vector2i& position, bool& orientation);
+	int findShipType(const int& tile, const int& tileThatCalledIt);
+	sf::Vector2i findShipPosition(const int& tile, const int& tileThatCalledIt);
+	bool findShipOrientation(const int& tile);
 };
 

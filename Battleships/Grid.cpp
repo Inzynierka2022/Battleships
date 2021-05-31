@@ -72,7 +72,7 @@ int Grid::getTile()
 	return tile_number;
 }
 
-bool Grid::checkTile(const int &tile)
+bool Grid::checkTile(const int& tile)
 {
 	bool result = false;
 	if (fields[tile % 10][tile / 10] == fieldType::Ship)
@@ -88,7 +88,7 @@ bool Grid::checkTile(const int &tile)
 	return result;
 }
 
-void Grid::changeField(const int&i, const bool&b)
+void Grid::changeField(const int& i, const bool& b)
 {
 	if (b) fields[i % 10][i / 10] = fieldType::Hit;
 	else fields[i % 10][i / 10] = fieldType::Miss;
@@ -120,16 +120,15 @@ bool Grid::checkIfShipDestroyed(const int& tile, const int& tileThatCalledIt) //
 				tempTile = tempX + tempY * 10;
 				if (fields[tempX][tempY] == fieldType::Ship) return false;
 				if (fields[tempX][tempY] == fieldType::Hit && tempTile != tileThatCalledIt && tempTile != tile)
-					if(!checkIfShipDestroyed(tempTile, tile)) return false;
+					if (!checkIfShipDestroyed(tempTile, tile)) return false;
 			}
 		}
 	}
 	return true;
 }
 
-void Grid::destroyShip(const int& tile, const int& tileThatCalledIt )
+void Grid::destroyShip(const int& tile, const int& tileThatCalledIt)
 {
-	std::cout << "hello: " << tile << std::endl;
 	if (tile < 0 || tile >= 100) return;
 	int x = tile % 10, y = tile / 10;
 
@@ -151,11 +150,87 @@ void Grid::destroyShip(const int& tile, const int& tileThatCalledIt )
 	}
 }
 
+int Grid::findShipType(const int& tile, const int& tileThatCalledIt)
+{
+	int type = 1;
+	int x = tile % 10, y = tile / 10;
+
+	int tempX, tempY, tempTile;
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			tempX = x + i - 1;
+			tempY = y + j - 1;
+			if (tempX >= 0 && tempX < 10 && tempY >= 0 && tempY < 10)
+			{
+				tempTile = tempX + tempY * 10;
+				if ((fields[tempX][tempY] == fieldType::Hit || fields[tempX][tempY] == fieldType::Ship) && tempTile != tileThatCalledIt && tempTile != tile)
+					type += findShipType(tempTile, tile);
+			}
+		}
+	}
+	return type;
+}
+
+sf::Vector2i Grid::findShipPosition(const int& tile, const int& tileThatCalledIt)
+{
+	int x = tile % 10, y = tile / 10;
+	sf::Vector2i position = getTilePosition(x, y);
+	if (x - 1 >= 0)
+	{
+		if ((fields[x - 1][y] == fieldType::Hit || fields[x - 1][y] == fieldType::Ship))
+			position = findShipPosition(x - 1 + y * 10, tile);
+	}
+	if (y - 1 >= 0)
+	{
+		if ((fields[x][y - 1] == fieldType::Hit || fields[x][y - 1] == fieldType::Ship))
+			position = findShipPosition(x + (y - 1) * 10, tile);
+	}
+	return position;
+}
+
+bool Grid::findShipOrientation(const int& tile)
+{
+	int x = tile % 10, y = tile / 10;
+	if (x - 1 >= 0)
+	{
+		if (fields[x - 1][y] == fieldType::Ship || fields[x - 1][y] == fieldType::Hit)
+			return true;
+	}
+	if (x + 1 < 10)
+	{
+		if (fields[x + 1][y] == fieldType::Ship || fields[x + 1][y] == fieldType::Hit)
+			return true;
+	}
+	if (y - 1 >= 0)
+	{
+		if (fields[x][y - 1] == fieldType::Ship || fields[x][y - 1] == fieldType::Hit)
+			return false;
+	}
+	if (y + 1 < 10)
+	{
+		if (fields[x][y + 1] == fieldType::Ship || fields[x][y + 1] == fieldType::Hit)
+			return false;
+	}
+	return false;
+}
+
+void Grid::getDestroyedShipInfo(int tile, int& type, sf::Vector2i& position, bool& orientation)
+{
+	type = findShipType(tile, -1);
+	position = findShipPosition(tile, -1);
+	if (type == 1)
+		orientation = true;
+	else
+		orientation = findShipOrientation(tile);
+}
+
 void Grid::drawMarkers(sf::RenderWindow& window)
 {
-	for (int x = 0; x < gridRows; x++) 
+	for (int x = 0; x < gridRows; x++)
 	{
-		for (int y = 0; y < gridColumns; y++) 
+		for (int y = 0; y < gridColumns; y++)
 		{
 			if (fields[x][y] == fieldType::Miss)
 			{
@@ -265,7 +340,7 @@ bool Grid::canPlaceShipOnPosition(Ship& s, int x, int y)
 {
 	if (s.getType() == 1)
 	{
-		if (isFree(sf::Vector2i(x,y))) return true;
+		if (isFree(sf::Vector2i(x, y))) return true;
 	}
 	else
 	{
@@ -294,7 +369,7 @@ sf::Vector2i Grid::getHoveredTilePosition()
 
 
 void Grid::placeShip(Ship& s)
-{	
+{
 	if (s.isPlaced())
 	{
 		int tileX = (s.getPosition().x - position.x) / gridSize;

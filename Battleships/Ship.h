@@ -8,9 +8,11 @@ private:
 	bool horizontal = true;
 	sf::Texture* shipsTextures;
 	bool placed = false;
+	bool visible = true;
 public:
 	Ship();
 	Ship(uint8_t type, sf::Vector2f position);
+	Ship(uint8_t type, sf::Vector2f position, bool visible);
 	void draw(sf::RenderWindow& window);
 	bool checkMousePosition(sf::Vector2i mousePosition);
 	void setPosition(sf::Vector2i position);
@@ -21,5 +23,7 @@ public:
 	void setOrientation(bool _horizontal);
 	void setPlaced(bool _placed);
 	bool isPlaced();
+	bool isVisible();
+	void setVisibility(const bool& visible);
 };
 
