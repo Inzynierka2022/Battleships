@@ -39,18 +39,22 @@ std::shared_ptr<std::vector<Package>> TCPCommunicator::receive()
 
 void TCPCommunicator::stop_listening()
 {
-	this->connected.store(true);
+	this->connected.store(false);
 }
 
 void TCPCommunicator::run()
 {
+	this->timeFromLastMessage.restart();
+
 	Package pack;
 	sf::Packet packet;
 
 	while (connected.load() == true)
 	{
+		std::cout << this->timeFromLastMessage.getElapsedTime().asSeconds() << std::endl;
 		if (this->socket->receive(packet) == sf::Socket::Done)
 		{
+			this->timeFromLastMessage.restart();
 			packet >> pack;
 			{
 				std::lock_guard<std::mutex> lock(this->in_queue_mutex);
@@ -59,15 +63,30 @@ void TCPCommunicator::run()
 				continue;
 			}
 		}
+		if (this->timeFromLastMessage.getElapsedTime().asSeconds() > 4)
+		{
+			//std::cout << "sendind 4" << std::endl;
+			pack.set_type_ping();
+
+			packet.clear();
+			std::lock_guard<std::mutex> lock(this->out_queue_mutex);
+			packet << pack;
+			this->socket->send(packet);
+		}
+		if (this->timeFromLastMessage.getElapsedTime().asSeconds() > 8)
+		{
+			std::lock_guard<std::mutex> lock(this->in_queue_mutex);
+			pack.set_type_disconnect_game();
+			this->connected.store(false);
+			this->in_queue.push_back(pack);
+		}
 		if (this->out_queue.size() > 0)
 		{
 			packet.clear();
-			//std::cout << out_queue.size() << '\n';
 			std::lock_guard<std::mutex> lock(this->out_queue_mutex);
 			packet << this->out_queue.front();
 			this->out_queue.erase(this->out_queue.begin());
 			this->socket->send(packet);
-
 			continue;
 		}
 		packet.clear();

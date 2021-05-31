@@ -144,7 +144,7 @@ void GameEngine::run(sf::RenderWindow& window)
 					timer.restart();
 					this->remainingTime = this->time_to_start - time_counter;
 					Package package;
-					if (remainingTime >= 0)
+					if (remainingTime >= 0 && !(gameState == 1 && isOpponentReady))
 					{
 						package.set_type_time(this->remainingTime);
 						this->setTime(this->remainingTime);
@@ -189,10 +189,13 @@ void GameEngine::run(sf::RenderWindow& window)
 						//tutaj automatyczny ruch
 						//je¿eli nie wybrany
 						//
+						package.set_type_change_turn();
+						this->communicator->send(package);
 						package.set_type_time(turn_time);
 						this->setTime(turn_time);
 						time_counter = 0;
-						//this->turn = !turn;
+						this->turn = !turn;
+						
 						if (turn) buttons[0]->setString("your turn");
 						else buttons[0]->setString("wait");
 					}
@@ -205,25 +208,6 @@ void GameEngine::run(sf::RenderWindow& window)
 			}
 
 		}
-		
-		/*if (gameState < 2 && isHost)
-		{
-			if (timer.getElapsedTime().asSeconds() >= 1.f)
-			{
-				time_counter++;
-				timer.restart();
-				//std::cout << this->time_to_start - time_counter << '\n';
-				this->remainingTime = this->time_to_start - time_counter;
-				Package package;
-				package.set_type_time(this->remainingTime);
-				communicator->send(package);
-				this->setTime(this->remainingTime);
-			}
-			if (time_counter == this->time_to_start)
-			{
-				gameState = 2;
-			}
-		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
@@ -235,6 +219,12 @@ void GameEngine::run(sf::RenderWindow& window)
 				buttons[0]->setString("not ready");
 				std::cout << "reset\n";
 			}
+			else if (!buttonPressed && gameState == 3)
+			{
+				//wróc do menu
+				buttonPressed = true;
+				break;
+			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
@@ -245,6 +235,9 @@ void GameEngine::run(sf::RenderWindow& window)
 				std::cout << gameState << '\n';
 				if (gameState) buttons[0]->setString("ready");
 				else buttons[0]->setString("not ready");
+				Package package;
+				package.set_type_ready();
+				this->communicator->send(package);
 			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
@@ -299,6 +292,7 @@ void GameEngine::run(sf::RenderWindow& window)
 
 		window.display();
 	}
+	this->communicator->stop_listening();
 	communicator_thread.join();
 }
 
@@ -326,12 +320,15 @@ void GameEngine::managePackages()
 			//czas
 			this->remainingTime = std::stoi(tmp.substr(1, tmp.size() - 1));
 			this->setTime(this->remainingTime);
+			/*if (this->remainingTime == turn_time)
+			{
+				changeTurn();
+			}*/
 			if (this->remainingTime == turn_time && gameState == 2)
 			{
 				//turn = !turn;
 				
 			}
-			std::cout << this->turn << '\n';
 			break;
 		case 'H':
 			//pozycja statku do zestrzelenia
@@ -356,11 +353,11 @@ void GameEngine::managePackages()
 				changeTurn();
 				this->communicator->send(package);
 				this->gridA.changeField(tile_number, false);
-				time_counter = 0;
-				timer.restart();
-				this->remainingTime = turn_time;
 				this->buttons[1]->setString(std::to_string(remainingTime));
 			}
+			time_counter = 0;
+			timer.restart();
+			this->remainingTime = turn_time;
 			break;
 		case 'A':
 			//odpowiedz na zestrzelenie pola
@@ -415,6 +412,7 @@ void GameEngine::managePackages()
 			else buttons[0]->setString("wait");
 			break;
 		case 'N':
+			//odebranie nazwy gracza i wys³anie swojej
 			//Button* opponent_name = new Button(sf::Vector2f(750, 33),tmp.substr(1,tmp.size()-1));
 			buttons.push_back(new Button(sf::Vector2f(750, 33), tmp.substr(1, tmp.size() - 1)));
 			if (!isHost)
@@ -425,8 +423,25 @@ void GameEngine::managePackages()
 			}
 			break;
 		case 'F':
+			//koniec gry przegra³eœ
 			this->gameState = 3;
 			buttons[0]->setString("loser");
+			break;
+		case 'D':
+			//koniec gry roz³¹czone
+			this->gameState = 3;
+			buttons[0]->setString("Disconnected");
+			break;
+		case 'C':
+			changeTurn();
+			break;
+		case 'R':
+			isOpponentReady = !isOpponentReady;
+			break;
+		case 'P':
+			Package p;
+			p.set_type_pong();
+			this->communicator->send(p);
 			break;
 		}
 	}
