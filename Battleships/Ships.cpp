@@ -164,6 +164,6 @@ void Ships::showShip(int type, sf::Vector2i position, bool orientation)
 			ships[i].setVisibility(true);
 			break;
 		}
-		//std::cout << (int)ships[i].getType() << " "<<ships[i].getPosition().x << " " << ships[i].getPosition().y << std::endl;
+		////std::cout << (int)ships[i].getType() << " "<<ships[i].getPosition().x << " " << ships[i].getPosition().y << std::endl;
 	}
 }

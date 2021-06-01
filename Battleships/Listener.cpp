@@ -16,9 +16,9 @@ bool Listener::validatePin()
 
 	if (!pinSet)
 	{
-		std::cout << "pin unset" << std::endl;
+		//std::cout << "pin unset" << std::endl;
 		package.set_type_validate_pin();
-		std::cout << "sending: " << package.get_content() << std::endl;
+		//std::cout << "sending: " << package.get_content() << std::endl;
 		packet = package.asPacket();
 		this->remoteSocket->send(packet);
 		return true;
@@ -30,7 +30,7 @@ bool Listener::validatePin()
 	packet = package.asPacket();
 	this->remoteSocket->send(packet);
 
-	std::cout << "sent: " << package.get_content() <<" to: "<<remoteSocket->getRemoteAddress().toString()<<":"<<remoteSocket->getRemotePort() <<std::endl;
+	//std::cout << "sent: " << package.get_content() <<" to: "<<remoteSocket->getRemoteAddress().toString()<<":"<<remoteSocket->getRemotePort() <<std::endl;
 
 	sf::Clock clock;
 
@@ -41,7 +41,7 @@ bool Listener::validatePin()
 		{
 			Package remotePin(packet);
 
-			std::cout << "received: " << remotePin.get_content() << std::endl;
+			//std::cout << "received: " << remotePin.get_content() << std::endl;
 			remotePin.get_content();
 
 			std::string localPin = "PIN;";
@@ -50,13 +50,13 @@ bool Listener::validatePin()
 			localPin.push_back(globalParameters.pin[2]);
 			localPin.push_back(globalParameters.pin[3]);
 
-			std::cout << remotePin.get_content() << " <> " << localPin << std::endl;
+			//std::cout << remotePin.get_content() << " <> " << localPin << std::endl;
 			return remotePin.get_content() == localPin;
 
 			package.set_type_validate_pin();
 			packet = package.asPacket();
 			this->remoteSocket->send(packet);
-			std::cout << "sent: " << package.get_content() << std::endl;
+			//std::cout << "sent: " << package.get_content() << std::endl;
 			return true;
 			break;
 
@@ -104,7 +104,7 @@ void Listener::listen()
 			}
 			else
 			{
-				std::cout << "disconnecting" << std::endl;
+				//std::cout << "disconnecting" << std::endl;
 				this->remoteSocket->disconnect();
 
 				listener.close();

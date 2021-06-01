@@ -97,7 +97,7 @@ void GameEngine::run(sf::RenderWindow& window)
 						{
 							lpm = true;
 							int bomb_tile = gridB.getTile();
-							std::cout << "klik\t" << bomb_tile << '\n';
+							//std::cout << "klik\t" << bomb_tile << '\n';
 							if (bomb_tile >= 0)
 							{
 								//leci poprawny strza�
@@ -225,7 +225,7 @@ void GameEngine::run(sf::RenderWindow& window)
 				ships.resetShips();
 				gridA.clearGrid();
 				buttons[0]->setString("not ready");
-				std::cout << "reset\n";
+				//std::cout << "reset\n";
 			}
 			else if (!buttonPressed && gameState == 3)
 			{
@@ -240,7 +240,7 @@ void GameEngine::run(sf::RenderWindow& window)
 			{
 				buttonPressed = true;
 				gameState = (gameState + 1) % 2;
-				std::cout << gameState << '\n';
+				//std::cout << gameState << '\n';
 				if (gameState) buttons[0]->setString("ready");
 				else buttons[0]->setString("not ready");
 				Package package;
@@ -312,12 +312,17 @@ bool GameEngine::chooseStartingPlayer()
 	{
 		if (rand() % 2 == 1) count++;
 	}
-	std::cout << count << '\n';
+	//std::cout << count << '\n';
 	return count > 44;
 }
 
 void GameEngine::managePackages()
 {
+	if (this->sounds.size() >= 50)
+	{
+		this->sounds.erase(this->sounds.begin(), this->sounds.cbegin() + 25);
+	}
+	//this->sounds.clear();
 	for (auto& x : *this->packages)
 	{
 		std::string tmp = x.get_content();
@@ -344,6 +349,11 @@ void GameEngine::managePackages()
 		{
 			//pozycja statku do zestrzelenia
 			tile_number = std::stoi(tmp.substr(1, tmp.size() - 1));
+
+			this->sounds.push_back(sf::Sound());
+			this->sounds.back().setBuffer(missB);
+			this->sounds.back().play();
+
 			if (gridA.checkTile(tile_number))
 			{
 				Package package;
@@ -372,9 +382,7 @@ void GameEngine::managePackages()
 			break;
 		}
 		case 'A':
-		{
-			sf::Sound sound;
-			
+		{			
 			//odpowiedz na zestrzelenie pola
 			if (tmp[1] == 'T')
 			{
@@ -392,14 +400,16 @@ void GameEngine::managePackages()
 					Package package;
 					package.set_type_finish_game();
 					this->communicator->send(package);
-					sound.setBuffer(winB);
-					sound.play();
+
+					this->sounds.push_back(sf::Sound());
+					this->sounds.back().setBuffer(winB);
+					this->sounds.back().play();
 				}
 				else
 				{
-					std::cout << "dupa123\n";
-					sound.setBuffer(hitB);
-					sound.play();
+					this->sounds.push_back(sf::Sound());
+					this->sounds.back().setBuffer(hitB);
+					this->sounds.back().play();
 				}
 			}
 			else if (tmp[1] == 'D')
@@ -412,8 +422,10 @@ void GameEngine::managePackages()
 				bool orientation;
 				this->gridB.getDestroyedShipInfo(tile_number, type, position, orientation);
 				this->enemyShips.showShip(type, position, orientation);
-				sound.setBuffer(destroyedB);
-				sound.play();
+
+				this->sounds.push_back(sf::Sound());
+				this->sounds.back().setBuffer(destroyedB);
+				this->sounds.back().play();
 			}
 			else
 			{
@@ -421,8 +433,10 @@ void GameEngine::managePackages()
 				gridB.changeField(tile_number, false);
 				changeTurn();
 				incMiss();
-				sound.setBuffer(missB);
-				sound.play();
+
+				this->sounds.push_back(sf::Sound());
+				this->sounds.back().setBuffer(missB);
+				this->sounds.back().play();
 			}
 			break;
 		}
@@ -465,9 +479,10 @@ void GameEngine::managePackages()
 			this->gameState = 3;
 			buttons[0]->setString("loser");
 			buttons[1]->setString("0");
-			sf::Sound sound;
-			sound.setBuffer(loseB);
-			sound.play();
+
+			this->sounds.push_back(sf::Sound());
+			this->sounds.back().setBuffer(loseB);
+			this->sounds.back().play();
 			break;
 		}
 		case 'D':
@@ -534,7 +549,7 @@ void GameEngine::writeToFile(std::string name1, std::string name2, std::string s
 	{
 		MyReadFile >> txt;
 		vectorTxt.push_back((std::string)txt);
-		std::cout << "dodaje: " << txt << std::endl;
+		//std::cout << "dodaje: " << txt << std::endl;
 	}
 	MyReadFile.close();
 	MyReadFile.open(name.c_str(), std::ios::out | std::ofstream::trunc);

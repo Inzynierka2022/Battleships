@@ -26,7 +26,7 @@ void ListenerMenu::run(sf::RenderWindow& window)
 	sf::Sprite sprite;
 	sprite.setTexture(texture);
 
-	std::cout << "listening" << std::endl;
+	//std::cout << "listening" << std::endl;
 	Listener listener;
 	std::thread listenerThread(&Listener::listen, &listener);
 	
@@ -60,7 +60,7 @@ void ListenerMenu::run(sf::RenderWindow& window)
 		//Check for connected client
 		if (listener.isConnected() == true)
 		{
-			std::cout << "Client connected" << std::endl;
+			//std::cout << "Client connected" << std::endl;
 			//Start game here
 			std::shared_ptr<TCPCommunicator> communicator = std::make_shared<TCPCommunicator>(listener.getRemoteSocket());
 			GameEngine game_engine(communicator,true);
@@ -75,9 +75,9 @@ void ListenerMenu::run(sf::RenderWindow& window)
 		this->draw(window);
 		window.display();
 	}
-	std::cout << "dupa" << '\n';
+	//std::cout << "dupa" << '\n';
 	listener.stopListening();
-	std::cout << "Waiting for listener to stop" << std::endl;
+	//std::cout << "Waiting for listener to stop" << std::endl;
 	listenerThread.join();
-	std::cout << "Listener terminated" << std::endl;
+	//std::cout << "Listener terminated" << std::endl;
 }

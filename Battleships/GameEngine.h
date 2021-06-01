@@ -43,6 +43,7 @@ private:
 	sf::SoundBuffer loseB;
 	sf::SoundBuffer winB;
 	sf::SoundBuffer destroyedB;
+	std::vector<sf::Sound> sounds;
 
 public:
 	const int time_to_start = 60; //60

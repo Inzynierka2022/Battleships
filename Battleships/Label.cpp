@@ -18,7 +18,7 @@ Label::Label(sf::Vector2f pos)
     this->text.setPosition(pos);
     if (!this->font.loadFromFile(Label::fontFile))
     {
-        std::cout << "error, cannot load font" << std::endl;
+        //std::cout << "error, cannot load font" << std::endl;
     }
     this->text.setCharacterSize(20);
     sf::FloatRect textRect = text.getLocalBounds();

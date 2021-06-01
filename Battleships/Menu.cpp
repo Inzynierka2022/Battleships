@@ -21,7 +21,7 @@ std::array<std::string, 4> read_from_file1(const std::string& fileName)
 	myFile.open(fileName, std::ios::in);
 	if (!myFile)
 	{
-		std::cout << "No such file";
+		//std::cout << "No such file";
 	}
 	else
 	{

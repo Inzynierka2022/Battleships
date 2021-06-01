@@ -10,12 +10,12 @@ std::shared_ptr<sf::TcpSocket> Joiner::connect()
     clock.restart();
     while(clock.getElapsedTime().asMilliseconds() <= __WAITING_TIME_MS)
     {
-        std::cout << "connecting to: " << globalParameters.remoteIP << ":" << globalParameters.remotePort << std::endl;
+        //std::cout << "connecting to: " << globalParameters.remoteIP << ":" << globalParameters.remotePort << std::endl;
 
         if (this->socket->connect(globalParameters.remoteIP, globalParameters.remotePort, sf::Time(sf::milliseconds(__WAITING_TIME_MS))) == sf::Socket::Done)
         {
-            std::cout << socket->getLocalPort() << std::endl;
-            std::cout << "done" << std::endl;
+            //std::cout << socket->getLocalPort() << std::endl;
+            //std::cout << "done" << std::endl;
             if (this->validatePin() == true)
             {
                 return this->socket;
@@ -44,12 +44,12 @@ bool Joiner::validatePin()
         if (this->socket->receive(packet) == sf::Socket::Done)
         {
             Package package(packet);
-            std::cout << "received: " << package.get_content() << std::endl;
+            //std::cout << "received: " << package.get_content() << std::endl;
             if (package.get_content() == "PIN_VALID")return true;
             else if (package.get_content() == "PIN_REQUEST")
             {
                 package.set_type_send_pin(globalParameters.pin);
-                std::cout << "sending " << globalParameters.pin[0] << globalParameters.pin[1] << globalParameters.pin[2] << globalParameters.pin[3] << std::endl;
+                //std::cout << "sending " << globalParameters.pin[0] << globalParameters.pin[1] << globalParameters.pin[2] << globalParameters.pin[3] << std::endl;
 
                 packet = package.asPacket();
                 this->socket->send(packet);

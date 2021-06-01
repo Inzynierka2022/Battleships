@@ -49,7 +49,7 @@ bool Grid::bomb_tile() // do wywalenia
 int Grid::getTile()
 {
 	int tile_number = -1;
-	//std::cout << "anyselected" << isAnySelected << '\n';
+	////std::cout << "anyselected" << isAnySelected << '\n';
 	if (fields[selectedTile.x][selectedTile.y] == fieldType::Hit || fields[selectedTile.x][selectedTile.y] == fieldType::Miss)
 	{
 		return tile_number;
@@ -67,7 +67,7 @@ int Grid::getTile()
 	if (this->isAnySelected)
 	{
 		tile_number = (selectedTile.y * 10) + selectedTile.x;
-		std::cout << tile_number << '\n';
+		//std::cout << tile_number << '\n';
 	}
 	return tile_number;
 }
@@ -387,11 +387,11 @@ void Grid::placeShip(Ship& s)
 		}
 		for (int j = 0; j < 10; j++) {
 			for (int i = 0; i < 10; i++) {
-				std::cout << (int)fields[i][j];
+				//std::cout << (int)fields[i][j];
 			}
-			std::cout << std::endl;
+			//std::cout << std::endl;
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 	}
 }
 
