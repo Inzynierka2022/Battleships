@@ -376,7 +376,9 @@ void GameEngine::managePackages()
 				incHit();
 				if (isFinished())
 				{
+
 					this->writeToFile(globalParameters.playerName, this->opponentName, std::to_string((hit * 200) - (miss * 100)),"scoreboard.txt");
+					buttons[1]->setString(std::to_string((hit * 200) - (miss * 100)));
 					this->gameState = 3;
 					buttons[0]->setString("winner");
 					Package package;
@@ -443,6 +445,7 @@ void GameEngine::managePackages()
 			//koniec gry przegra�e�
 			this->gameState = 3;
 			buttons[0]->setString("loser");
+			buttons[1]->setString("0");
 			break;
 		}
 		case 'D':
