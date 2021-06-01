@@ -97,7 +97,8 @@ Menu::Menu(Stored_menu menu, const sf::Vector2u& windowSize) : menu_class(menu)
 		{
 			return Button::ButtonState::Terminate;
 		};
-
+		this->elements[1]->setCanHover(true);
+		this->elements[4]->setCanHover(true);
 	}
 	else if (this->menu_class == Menu::Stored_menu::join)
 	{

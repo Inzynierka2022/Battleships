@@ -2,6 +2,7 @@
 #include "Menu.h"
 #include "Grid.h"
 #include <iostream>
+#include <windows.h>
 #include "GameEngine.h"
 #include "Button.h"
 #include "Runnable.h"
@@ -16,6 +17,7 @@ NetworkParameters globalParameters;
 
 int main()
 {
+    FreeConsole();
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Battleships");
 
     Menu menu(Menu::Stored_menu::main, window.getSize());
