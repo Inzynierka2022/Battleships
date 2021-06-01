@@ -51,7 +51,6 @@ void TCPCommunicator::run()
 
 	while (connected.load() == true)
 	{
-		std::cout << this->timeFromLastMessage.getElapsedTime().asSeconds() << std::endl;
 		if (this->socket->receive(packet) == sf::Socket::Done)
 		{
 			this->timeFromLastMessage.restart();
@@ -59,13 +58,11 @@ void TCPCommunicator::run()
 			{
 				std::lock_guard<std::mutex> lock(this->in_queue_mutex);
 				this->in_queue.push_back(pack);
-				//std::cout << pack.get_content() << '\n';
 				continue;
 			}
 		}
 		if (this->timeFromLastMessage.getElapsedTime().asSeconds() > 4)
 		{
-			//std::cout << "sendind 4" << std::endl;
 			pack.set_type_ping();
 
 			packet.clear();

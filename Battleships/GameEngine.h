@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Grid.h"
 #include "TCPCommunicator.h"
 #include "Ships.h"
@@ -37,6 +38,11 @@ private:
 	int time_counter = 0;
 	int hit = 0;
 	int miss = 0;
+	sf::SoundBuffer hitB;
+	sf::SoundBuffer missB;
+	sf::SoundBuffer loseB;
+	sf::SoundBuffer winB;
+	sf::SoundBuffer destroyedB;
 
 public:
 	const int time_to_start = 60; //60

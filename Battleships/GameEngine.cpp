@@ -12,6 +12,12 @@ GameEngine::GameEngine(std::shared_ptr<TCPCommunicator> s, bool hosting)
 	buttons.push_back(timer);
 	Button* myName = new Button(sf::Vector2f(270, 33), globalParameters.playerName);
 	buttons.push_back(myName);
+
+	hitB.loadFromFile("hit.wav");
+	missB.loadFromFile("miss.wav");
+	loseB.loadFromFile("loser.wav");
+	winB.loadFromFile("win.wav");
+	destroyedB.loadFromFile("destroyed.wav");
 }
 
 GameEngine::~GameEngine()
@@ -367,6 +373,8 @@ void GameEngine::managePackages()
 		}
 		case 'A':
 		{
+			sf::Sound sound;
+			
 			//odpowiedz na zestrzelenie pola
 			if (tmp[1] == 'T')
 			{
@@ -384,8 +392,15 @@ void GameEngine::managePackages()
 					Package package;
 					package.set_type_finish_game();
 					this->communicator->send(package);
+					sound.setBuffer(winB);
+					sound.play();
 				}
-
+				else
+				{
+					std::cout << "dupa123\n";
+					sound.setBuffer(hitB);
+					sound.play();
+				}
 			}
 			else if (tmp[1] == 'D')
 			{
@@ -397,6 +412,8 @@ void GameEngine::managePackages()
 				bool orientation;
 				this->gridB.getDestroyedShipInfo(tile_number, type, position, orientation);
 				this->enemyShips.showShip(type, position, orientation);
+				sound.setBuffer(destroyedB);
+				sound.play();
 			}
 			else
 			{
@@ -404,6 +421,8 @@ void GameEngine::managePackages()
 				gridB.changeField(tile_number, false);
 				changeTurn();
 				incMiss();
+				sound.setBuffer(missB);
+				sound.play();
 			}
 			break;
 		}
@@ -446,6 +465,9 @@ void GameEngine::managePackages()
 			this->gameState = 3;
 			buttons[0]->setString("loser");
 			buttons[1]->setString("0");
+			sf::Sound sound;
+			sound.setBuffer(loseB);
+			sound.play();
 			break;
 		}
 		case 'D':
