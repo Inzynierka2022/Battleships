@@ -49,7 +49,7 @@ void GameEngine::run(sf::RenderWindow& window)
 			Package package("false");
 			this->communicator->send(package);
 		}*/
-		writeToFile("name1", "name2", "3211349", "scoreboard.txt");
+		//writeToFile("name1", "name2", "3211349", "scoreboard.txt");
 		Package package;
 		if (turn) package.set_type_starting_player("F");
 		else package.set_type_starting_player("T");
