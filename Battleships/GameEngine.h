@@ -22,6 +22,7 @@ private:
 	bool isHost = false;
 	bool isOpponentReady = false;
 	int remainingTime = 0;
+	std::string opponentName;
 	/*
 	0 - placing ships
 	1 - ready/waiting for opponent
@@ -38,8 +39,8 @@ private:
 	int miss = 0;
 
 public:
-	const int time_to_start = 10; //60
-	const int turn_time = 10; //30
+	const int time_to_start = 60; //60
+	const int turn_time = 30; //30
 	GameEngine(std::shared_ptr<TCPCommunicator>,bool);
 	~GameEngine();
 	void run(sf::RenderWindow&/*,std::shared_ptr<TCPCommunicator> c*/);

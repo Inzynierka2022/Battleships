@@ -319,6 +319,7 @@ void GameEngine::managePackages()
 		switch (tmp[0])
 		{
 		case 'T':
+		{
 			//czas
 			this->remainingTime = std::stoi(tmp.substr(1, tmp.size() - 1));
 			this->setTime(this->remainingTime);
@@ -332,7 +333,9 @@ void GameEngine::managePackages()
 
 			}
 			break;
+		}
 		case 'H':
+		{
 			//pozycja statku do zestrzelenia
 			tile_number = std::stoi(tmp.substr(1, tmp.size() - 1));
 			if (gridA.checkTile(tile_number))
@@ -361,7 +364,9 @@ void GameEngine::managePackages()
 			timer.restart();
 			this->remainingTime = turn_time;
 			break;
+		}
 		case 'A':
+		{
 			//odpowiedz na zestrzelenie pola
 			if (tmp[1] == 'T')
 			{
@@ -371,6 +376,7 @@ void GameEngine::managePackages()
 				incHit();
 				if (isFinished())
 				{
+					this->writeToFile(globalParameters.playerName, this->opponentName, std::to_string((hit * 200) - (miss * 100)),"scoreboard.txt");
 					this->gameState = 3;
 					buttons[0]->setString("winner");
 					Package package;
@@ -388,7 +394,7 @@ void GameEngine::managePackages()
 				sf::Vector2i position;
 				bool orientation;
 				this->gridB.getDestroyedShipInfo(tile_number, type, position, orientation);
-				this->enemyShips.showShip(type,position, orientation);
+				this->enemyShips.showShip(type, position, orientation);
 			}
 			else
 			{
@@ -398,12 +404,16 @@ void GameEngine::managePackages()
 				incMiss();
 			}
 			break;
+		}
 		case 'B':
+		{
 			//wylosowany zaczynaj�cy
 			if (tmp[1] == 'F') turn = false;
 			else turn = true;
 			break;
+		}
 		case 'S':
+		{
 			//komunikat startu gry
 			if (!ships.checkIfAllPlaced())
 			{
@@ -413,10 +423,13 @@ void GameEngine::managePackages()
 			if (turn) buttons[0]->setString("your turn");
 			else buttons[0]->setString("wait");
 			break;
+		}
 		case 'N':
+		{
 			//odebranie nazwy gracza i wys�anie swojej
 			//Button* opponent_name = new Button(sf::Vector2f(750, 33),tmp.substr(1,tmp.size()-1));
-			buttons.push_back(new Button(sf::Vector2f(750, 33), tmp.substr(1, tmp.size() - 1)));
+			this->opponentName = tmp.substr(1, tmp.size() - 1);
+			buttons.push_back(new Button(sf::Vector2f(750, 33), this->opponentName));
 			if (!isHost)
 			{
 				Package package;
@@ -424,27 +437,38 @@ void GameEngine::managePackages()
 				this->communicator->send(package);
 			}
 			break;
+		}
 		case 'F':
+		{
 			//koniec gry przegra�e�
 			this->gameState = 3;
 			buttons[0]->setString("loser");
 			break;
+		}
 		case 'D':
+		{
 			//koniec gry roz��czone
 			this->gameState = 3;
 			buttons[0]->setString("Disconnected");
 			break;
+		}
 		case 'C':
+		{
 			changeTurn();
 			break;
+		}
 		case 'R':
+		{
 			isOpponentReady = !isOpponentReady;
 			break;
+		}
 		case 'P':
+		{
 			Package p;
 			p.set_type_pong();
 			this->communicator->send(p);
 			break;
+		}
 		}
 	}
 }
